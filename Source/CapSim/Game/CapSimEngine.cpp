@@ -1,5 +1,6 @@
 #include "CapSim/Game/CapSimEngine.h"
 
+int FCapSimEngine::frame = 0;
 
 void FCapSimEngine::NotifyInitGame(ASensorManager* Manager)
 {
@@ -35,6 +36,7 @@ void FCapSimEngine::OnPreTick(UWorld* World, ELevelTick TickType, float DeltaSec
 void FCapSimEngine::OnPostTick(UWorld* World, ELevelTick TickType, float DeltaSeconds)
 {
 	SensorManager->PostPhysTick(World, TickType, DeltaSeconds);
+	frame++;
 }
 
 

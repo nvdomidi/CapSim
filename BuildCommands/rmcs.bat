@@ -1,0 +1,6 @@
+rmdir /s /q "F:\Unreal Engine Projects\CapSim\Binaries"
+rmdir /s /q "F:\Unreal Engine Projects\CapSim\Intermediate"
+rmdir /s /q "F:\Unreal Engine Projects\CapSim\Saved"
+rmdir /s /q "F:\Unreal Engine Projects\CapSim\.vs"
+rmdir /s /q "F:\Unreal Engine Projects\CapSim\DerivedDataCache"
+del /s /q "F:\Unreal Engine Projects\CapSim\CapSim.sln"

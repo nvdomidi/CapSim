@@ -15,9 +15,12 @@ public:
 
 	ASensorManager* SensorManager;
 
+	static int GetFrameCounter() { return frame; }
+
 private:
 
 	bool bIsRunning = false;
+	static int frame;
 
 	FDelegateHandle OnPreTickHandle;
 	FDelegateHandle OnPostTickHandle;

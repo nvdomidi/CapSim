@@ -1,0 +1,1 @@
+"F:/UE_427(Source)/UnrealEngine/Engine/Binaries/DotNET/UnrealBuildTool.exe" -projectfiles -project="F:/Unreal Engine Projects/CapSim/CapSim.uproject" -game -engine -progress -log="F:\Unreal Engine Projects\CapSim/Saved/Logs/UnrealVersionSelector-2023.04.15-13.05.51.log"

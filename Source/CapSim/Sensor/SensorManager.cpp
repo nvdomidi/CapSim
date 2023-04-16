@@ -2,8 +2,9 @@
 
 
 #include "SensorManager.h"
-//#include "CapSim/Sensor/SceneCaptureSensor.h"
-//#include "CapSim/Sensor/SceneCaptureCameraTest1.h"
+#include "CapSim/Sensor/PixelReader.h"
+#include "CapSim/Sensor/SceneCaptureSensor.h"
+#include "CapSim/Sensor/SceneCaptureCameraTest1.h"
 
 // Sets default values
 ASensorManager::ASensorManager()
@@ -15,7 +16,7 @@ ASensorManager::ASensorManager()
 
 void ASensorManager::PostPhysTick(UWorld* World, ELevelTick TickType, float DeltaSeconds)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Ticking in SensorManager"));
+	UE_LOG(LogTemp, Warning, TEXT("Ticking in SensorManager 2222"));
 	UE_LOG(LogTemp, Warning, TEXT("%d"), SensorList.Num());
 	for (ASensor* Sensor : SensorList)
 	{
@@ -30,8 +31,8 @@ void ASensorManager::BeginPlay()
 	Super::BeginPlay();
 	
 	//auto SceneCaptureSensor = GetWorld()->SpawnActor<ASceneCaptureSensor>(ASceneCaptureSensor::StaticClass());
-	////////auto SceneCaptureCameraTest1 = GetWorld()->SpawnActor<ASceneCaptureCameraTest1>(ASceneCaptureCameraTest1::StaticClass());
-	////////SensorList.Add(SceneCaptureCameraTest1);
+	auto SceneCaptureCameraTest1 = GetWorld()->SpawnActor<ASceneCaptureCameraTest1>(ASceneCaptureCameraTest1::StaticClass());
+	SensorList.Add(SceneCaptureCameraTest1);
 }
 
 // Called every frame
