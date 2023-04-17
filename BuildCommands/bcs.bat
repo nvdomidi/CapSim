@@ -1,1 +1,1 @@
-"F:\UE_427(Source)\UnrealEngine\Engine\Build\BatchFiles\Build.bat" CapSimEditor Win64 Development "F:\Unreal Engine Projects\CapSim\CapSim.uproject"
+"F:\UE_427(Source)\UnrealEngine\Engine\Build\BatchFiles\Build.bat" CapSimEditor Win64 Development "F:\Unreal Engine Projects\CapSim\CapSim.uproject" -waitmutex -incremental
