@@ -9,7 +9,7 @@ ASceneCaptureCamera::ASceneCaptureCamera() : Super()
     // TODO: Add post-processing material
     
     AddPostProcessingMaterial(
-        TEXT("Material'/CapSim/Content/PostProcessingMaterials/PhysicLensDistortion.PhysicLensDistortion'"));
+        TEXT("Material'/Game/PostProcessingMaterials/PhysicLensDistortion'"));
 }
 
 void ASceneCaptureCamera::BeginPlay()

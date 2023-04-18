@@ -5,10 +5,16 @@
 
 bool AShaderBasedSensor::AddPostProcessingMaterial(const FString &Path)
 {
+  UE_LOG(LogTemp, Warning, TEXT("MatLoad: %s"), *Path);
+
   ConstructorHelpers::FObjectFinder<UMaterial> Loader(*Path);
   if (Loader.Succeeded())
   {
-    MaterialsFound.Add(Loader.Object);
+      UE_LOG(LogTemp, Warning, TEXT("MatLoad: Found!"));
+      MaterialsFound.Add(Loader.Object);
+  }
+  else {
+      UE_LOG(LogTemp, Warning, TEXT("MatLoad: Not Found!"));
   }
   return Loader.Succeeded();
 }

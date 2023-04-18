@@ -29,8 +29,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Use this to add sensor from blueprint
-	UFUNCTION(BlueprintCallable)
-	void AddSensor(ASensor& Sensor);
+	
+	//UFUNCTION(BlueprintCallable)
+	//void AddSensor(ASensor& Sensor);
+
 
 private:
 	

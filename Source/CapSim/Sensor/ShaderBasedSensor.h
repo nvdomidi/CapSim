@@ -47,7 +47,7 @@ public:
 
   AShaderBasedSensor() : Super()
   {
-      EnablePostProcessingEffects(false);
+      //EnablePostProcessingEffects(false);
   }
 
   /// Load the UMaterialInstanceDynamic at the given @a Path and
