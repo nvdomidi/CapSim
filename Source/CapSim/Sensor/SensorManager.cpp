@@ -4,7 +4,7 @@
 #include "SensorManager.h"
 #include "CapSim/Sensor/PixelReader.h"
 #include "CapSim/Sensor/SceneCaptureSensor.h"
-#include "CapSim/Sensor/SceneCaptureCameraTest1.h"
+#include "CapSim/Sensor/SceneCaptureCamera.h"
 
 // Sets default values
 ASensorManager::ASensorManager()
@@ -30,9 +30,8 @@ void ASensorManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//auto SceneCaptureSensor = GetWorld()->SpawnActor<ASceneCaptureSensor>(ASceneCaptureSensor::StaticClass());
-	auto SceneCaptureCameraTest1 = GetWorld()->SpawnActor<ASceneCaptureCameraTest1>(ASceneCaptureCameraTest1::StaticClass());
-	SensorList.Add(SceneCaptureCameraTest1);
+	//auto SceneCaptureCamera = GetWorld()->SpawnActor<ASceneCaptureCamera>(ASceneCaptureCamera::StaticClass());
+	//SensorList.Add(SceneCaptureCamera);
 }
 
 // Called every frame
@@ -40,5 +39,11 @@ void ASensorManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+// adding sensor to sensormanager
+void ASensorManager::AddSensor(ASensor& Sensor)
+{
+	SensorList.Add(&Sensor);
 }
 

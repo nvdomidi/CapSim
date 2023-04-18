@@ -28,6 +28,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Use this to add sensor from blueprint
+	UFUNCTION(BlueprintCallable)
+	void AddSensor(ASensor& Sensor);
+
 private:
 	
 	UPROPERTY(EditAnywhere)
