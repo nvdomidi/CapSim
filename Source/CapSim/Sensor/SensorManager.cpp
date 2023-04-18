@@ -41,10 +41,10 @@ void ASensorManager::Tick(float DeltaTime)
 
 }
 
-/*
+
 // adding sensor to sensormanager
-void ASensorManager::AddSensor(ASensor& Sensor)
+void ASensorManager::AddSensor(ASensor *Sensor)
 {
-	SensorList.Add(&Sensor);
+	SensorList.Add(Sensor);
 }
-*/
+
