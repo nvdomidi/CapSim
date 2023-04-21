@@ -2,8 +2,6 @@
 
 #include <functional>
 
-#include "CapSim/Game/CapSimEngine.h"
-
 #include "CoreGlobals.h"
 #include "Engine/TextureRenderTarget2D.h"
 #include "Runtime/ImageWriteQueue/Public/ImagePixelData.h"
@@ -50,12 +48,12 @@ public:
     ///
     /// @pre To be called from game-thread.
     template <typename TSensor, typename TPixel>
-    static void SendPixelsInRenderThread(TSensor& Sensor, bool use16BitFormat = false, std::function<TArray<TPixel>(void*, uint32)> Conversor = {});
+    static void SendPixelsInRenderThread(TSensor& Sensor, FString filePath, bool use16BitFormat = false, std::function<TArray<TPixel>(void*, uint32)> Conversor = {});
 
 };
 
 template<typename TSensor, typename TPixel>
-void FPixelReader::SendPixelsInRenderThread(TSensor& Sensor, bool use16BitFormat, std::function<TArray<TPixel>(void*, uint32)> Conversor)
+void FPixelReader::SendPixelsInRenderThread(TSensor& Sensor, FString filePath, bool use16BitFormat, std::function<TArray<TPixel>(void*, uint32)> Conversor)
 {
     check(Sensor.CaptureRenderTarget != nullptr);
 
@@ -67,12 +65,6 @@ void FPixelReader::SendPixelsInRenderThread(TSensor& Sensor, bool use16BitFormat
     /// Blocks until the render thread has finished all it's tasks.
     // TODO: Sensor.enqueue...
     Sensor.EnqueueRenderSceneImmediate();
-
-    // Added by Navid
-
-    // TODO: grab frame from CapSimEngine
-    FString filePath = FString::Printf(TEXT("D:/carla_images/capsim_%d.png"), FCapSimEngine::GetFrameCounter());
-    //FString filePath = FString::Printf(TEXT("D:/carla_images/carla.png"));
 
     // TODO: SavePixelsToDisk, GetCaptureRenderTarget
     SavePixelsToDisk(*Sensor.GetCaptureRenderTarget(), filePath);

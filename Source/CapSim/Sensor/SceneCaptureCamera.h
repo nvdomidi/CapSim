@@ -19,4 +19,22 @@ protected:
 
   void BeginPlay() override;
   void PostPhysTick(UWorld *World, ELevelTick TickType, float DeltaSeconds) override;
+
+  UFUNCTION(BlueprintCallable, Category = "CapSim")
+  void StartRecording();
+
+  UFUNCTION(BlueprintCallable, Category = "CapSim")
+  void StopRecording();
+
+  UFUNCTION(BlueprintCallable, Category = "CapSim")
+  void SetCapturePath(const FString path);
+
+  UFUNCTION(BlueprintCallable, Category = "CapSim")
+  void CaptureScene(const FString path);
+
+private:
+
+	bool bIsRecording = false;
+
+	FString folderPath = "D:/Carla_Images";
 };

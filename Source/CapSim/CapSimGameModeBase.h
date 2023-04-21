@@ -19,6 +19,6 @@ class CAPSIM_API ACapSimGameModeBase : public AGameModeBase
 protected:
 	virtual void BeginPlay() override;
 	
-private:
-	FCapSimEngine CapSimEngine;
+//private:
+	//FCapSimEngine CapSimEngine;
 };

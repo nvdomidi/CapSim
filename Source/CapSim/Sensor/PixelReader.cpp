@@ -34,6 +34,7 @@ TUniquePtr<TImagePixelData<FColor>> FPixelReader::DumpPixels(UTextureRenderTarge
 {
 	const FIntPoint DestSize(RenderTarget.GetSurfaceWidth(), RenderTarget.GetSurfaceHeight());
 	TUniquePtr<TImagePixelData<FColor>> PixelData = MakeUnique<TImagePixelData<FColor>>(DestSize);
+
 	TArray<FColor> Pixels(PixelData->Pixels.GetData(), PixelData->Pixels.Num());
 	if (!WritePixelsToArray(RenderTarget, Pixels))
 	{

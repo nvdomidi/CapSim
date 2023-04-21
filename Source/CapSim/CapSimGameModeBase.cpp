@@ -7,8 +7,10 @@
 
 void ACapSimGameModeBase::BeginPlay()
 {
+	/*
 	UE_LOG(LogTemp, Warning, TEXT("Begin Play CapSimGameModeBase"));
 
 	auto SensorManager = GetWorld()->SpawnActor<ASensorManager>(ASensorManager::StaticClass());
 	CapSimEngine.NotifyInitGame(SensorManager);
+	*/
 }
