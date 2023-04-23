@@ -36,5 +36,5 @@ private:
 
 	bool bIsRecording = false;
 
-	FString folderPath = "D:/Carla_Images";
+	FString folderPath = "D:/CapSim_Images";
 };

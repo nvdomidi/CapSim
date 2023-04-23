@@ -14,7 +14,7 @@ ASceneCaptureCamera::ASceneCaptureCamera() : Super()
 
 void ASceneCaptureCamera::BeginPlay()
 {
-  Super::BeginPlay();
+  //Super::BeginPlay();
 }
 
 

@@ -47,7 +47,7 @@ public:
 
   AShaderBasedSensor() : Super()
   {
-      //EnablePostProcessingEffects(false);
+
   }
 
   /// Load the UMaterialInstanceDynamic at the given @a Path and
@@ -65,7 +65,30 @@ public:
     Shaders.Add(Shader);
   }
 
+  /* Functions added by Navid to change shader parameters */
+  UFUNCTION(BlueprintCallable)
+  void SetLensCircleFallOff(float val = 5.0f);
+
+  UFUNCTION(BlueprintCallable)
+  void SetLensCircleMultiplier(float val = 0.0f);
+
+  UFUNCTION(BlueprintCallable)
+  void SetLensK(float val = -1.0f);
+
+  UFUNCTION(BlueprintCallable)
+  void SetLensKCube(float val = 0.0f);
+
+  UFUNCTION(BlueprintCallable)
+  void SetLensXSize(float val = 0.08f);
+
+  UFUNCTION(BlueprintCallable)
+  void SetLensYSize(float val = 0.08f);
+
+
+
   void SetFloatShaderParameter(uint8_t ShaderIndex, const FName &ParameterName, float Value);
+
+  void UpdateFloatShaderParameter(uint8_t ShaderIndex, const FName& ParameterName, float Value);
 
 protected:
 

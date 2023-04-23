@@ -36,8 +36,10 @@ public:
 		return CaptureRenderTarget;
 	}
 
-
 	void SetImageSize(uint32 Width, uint32 Height);
+
+	UFUNCTION(BlueprintCallable)
+	void SetImageSizeAndUpdate(int Width, int Height);
 
 	uint32 GetImageWidth() const
 	{
@@ -53,6 +55,8 @@ public:
 		void EnablePostProcessingEffects(bool Enable = true)
 	{
 		bEnablePostProcessingEffects = Enable;
+
+		//InitializePostProcessingEffects();
 	}
 
 	UFUNCTION(BlueprintCallable)
@@ -265,6 +269,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		float GetChromAberrOffset() const;
 
+	UFUNCTION(BlueprintCallable)
+		void ApplyPostProcessing();
+
 	/// Use for debugging purposes only.
 	UFUNCTION(BlueprintCallable)
 		bool ReadPixels(TArray<FColor>& BitMap) const
@@ -320,7 +327,6 @@ protected:
 	/// Whether to change render target format to PF_A16B16G16R16, offering 16bit / channel
 	UPROPERTY(EditAnywhere)
 		bool bEnable16BitFormat = false;
-
 
 	virtual void PostPhysTick(UWorld* World, ELevelTick TickType, float DeltaSeconds) override;
 

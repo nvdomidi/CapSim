@@ -21,10 +21,15 @@ bool AShaderBasedSensor::AddPostProcessingMaterial(const FString &Path)
 
 void AShaderBasedSensor::SetUpSceneCaptureComponent(USceneCaptureComponent2D &SceneCapture)
 {
+    UE_LOG(LogTemp, Warning, TEXT("callingfunction SetupSceneCaptureComponent, Materials found: %d"), MaterialsFound.Num());
+
   for (const auto &MaterialFound : MaterialsFound)
   {
     // Create a dynamic instance of the Material (Shader)
     AddShader({UMaterialInstanceDynamic::Create(MaterialFound, this), 1.0});
+
+
+    UE_LOG(LogTemp, Warning, TEXT("MatLoader: %s"), *(MaterialFound->GetFName().ToString()));
   }
 
   for (const auto &Shader : Shaders)
@@ -42,10 +47,63 @@ void AShaderBasedSensor::SetUpSceneCaptureComponent(USceneCaptureComponent2D &Sc
   }
 }
 
+
+// Blueprint callable functions to edit shader parameters
+void AShaderBasedSensor::SetLensCircleFallOff(float val)
+{
+    this->SetFloatShaderParameter(0, TEXT("CircleFalloff_NState"), val);
+}
+
+void AShaderBasedSensor::SetLensCircleMultiplier(float val)
+{
+    //this->SetFloatShaderParameter(0, TEXT("CircleMultiplier_NState"), val);
+
+    Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+        TEXT("CircleMultiplier_NState"),
+        val);
+
+    //CaptureComponent2D->PostProcessSettings.RemoveBlendable(Shaders[0].PostProcessMaterial);
+    UE_LOG(LogTemp, Warning, TEXT("MatLoader: SetLensCircleMultiplier"));
+
+}
+
+void AShaderBasedSensor::SetLensK(float val)
+{
+    this->SetFloatShaderParameter(0, TEXT("K_NState"), val);
+}
+
+void AShaderBasedSensor::SetLensKCube(float val)
+{
+    this->SetFloatShaderParameter(0, TEXT("kcube"), val);
+}
+
+void AShaderBasedSensor::SetLensXSize(float val)
+{
+    this->SetFloatShaderParameter(0, TEXT("XSize_NState"), val);
+}
+
+void AShaderBasedSensor::SetLensYSize(float val)
+{
+    this->SetFloatShaderParameter(0, TEXT("YSize_NState"), val);
+}
+
+/*  ------------------------------------------------------------------   */
+
 void AShaderBasedSensor::SetFloatShaderParameter(
     uint8_t ShaderIndex,
     const FName &ParameterName,
     float Value)
 {
   FloatShaderParams.Add({ShaderIndex, ParameterName, Value});
+}
+
+void AShaderBasedSensor::UpdateFloatShaderParameter(uint8_t ShaderIndex, const FName& ParameterName, float Value)
+{
+    for (auto& FloatParam : FloatShaderParams)
+    {
+        if (FloatParam.ParameterName == ParameterName)
+        {
+            FloatParam.Value = Value;
+        }
+    }
 }

@@ -43,6 +43,8 @@ ASceneCaptureSensor::ASceneCaptureSensor()
 
 	SceneCaptureSensor_local_ns::SetCameraDefaultOverrides(*CaptureComponent2D);
 
+    UE_LOG(LogTemp, Warning, TEXT("inbetween"));
+
 }
 
 
@@ -50,6 +52,13 @@ void ASceneCaptureSensor::SetImageSize(uint32 InWidth, uint32 InHeight)
 {
 	ImageWidth = InWidth;
 	ImageHeight = InHeight;
+}
+
+void ASceneCaptureSensor::SetImageSizeAndUpdate(int Width, int Height)
+{
+    ImageWidth = Width;
+    ImageHeight = Height;
+    ApplyPostProcessing();
 }
 
 void ASceneCaptureSensor::SetFOVAngle(const float FOVAngle)
@@ -418,6 +427,41 @@ float ASceneCaptureSensor::GetChromAberrOffset() const
 	return CaptureComponent2D->PostProcessSettings.ChromaticAberrationStartOffset;
 }
 
+void ASceneCaptureSensor::ApplyPostProcessing()
+{
+    // Determine the gamma of the player.
+    const bool bInForceLinearGamma = !bEnablePostProcessingEffects;
+
+    CaptureRenderTarget->InitCustomFormat(ImageWidth, ImageHeight, bEnable16BitFormat ? PF_FloatRGBA : PF_B8G8R8A8,
+        bInForceLinearGamma);
+
+    if (bEnablePostProcessingEffects)
+    {
+        CaptureRenderTarget->TargetGamma = TargetGamma;
+    }
+
+    check(IsValid(CaptureComponent2D) && !CaptureComponent2D->IsPendingKill());
+
+    CaptureComponent2D->Deactivate();
+    CaptureComponent2D->TextureTarget = CaptureRenderTarget;
+
+    // Call derived classes to set up their things.
+    SetUpSceneCaptureComponent(*CaptureComponent2D);
+
+    CaptureComponent2D->CaptureSource = ESceneCaptureSource::SCS_FinalColorLDR;
+
+    CaptureComponent2D->UpdateContent();
+    CaptureComponent2D->Activate();
+
+    // Make sure that there is enough time in the render queue.
+    UKismetSystemLibrary::ExecuteConsoleCommand(
+        GetWorld(),
+        FString("g.TimeoutForBlockOnRenderFence 300000"));
+
+    SceneCaptureSensor_local_ns::ConfigureShowFlags(CaptureComponent2D->ShowFlags,
+        bEnablePostProcessingEffects);
+}
+
 void ASceneCaptureSensor::EnqueueRenderSceneImmediate() {
 	TRACE_CPUPROFILER_EVENT_SCOPE(ASceneCaptureSensor::EnqueueRenderSceneImmediate);
 	// Equivalent to "CaptureComponent2D->CaptureScene" + (optional) GBuffer extraction.
@@ -499,7 +543,6 @@ void ASceneCaptureSensor::PostPhysTick(UWorld* World, ELevelTick TickType, float
 {
 	Super::PostPhysTick(World, TickType, DeltaTime);
 }
-
 
 
 // =============================================================================
@@ -725,7 +768,7 @@ namespace SceneCaptureSensor_local_ns {
         // ShowFlags.SetTranslucency(false);
         // ShowFlags.SetVectorFields(false);
         // ShowFlags.SetVertexColors(false);
-        // ShowFlags.SetVignette(false);
+        //ShowFlags.SetVignette(false);
         // ShowFlags.SetVisLog(false);
         // ShowFlags.SetVisualizeAdaptiveDOF(false);
         // ShowFlags.SetVisualizeBloom(false);
@@ -746,6 +789,10 @@ namespace SceneCaptureSensor_local_ns {
         // ShowFlags.SetVolumes(false);
         // ShowFlags.SetWidgetComponents(false);
         // ShowFlags.SetWireframe(false);
+
+        //ShowFlags.SetGrain(true);
+        //ShowFlags.SetLensFlares(true);
+        //ShowFlags.SetVignette(true);
     }
 
 } // namespace SceneCaptureSensor_local_ns

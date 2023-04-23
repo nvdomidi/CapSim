@@ -30,8 +30,8 @@ void ASensorManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	auto SceneCaptureCamera = GetWorld()->SpawnActor<ASceneCaptureCamera>(ASceneCaptureCamera::StaticClass());
-	SensorList.Add(SceneCaptureCamera);
+	//auto SceneCaptureCamera = GetWorld()->SpawnActor<ASceneCaptureCamera>(ASceneCaptureCamera::StaticClass());
+	//SensorList.Add(SceneCaptureCamera);
 }
 
 // Called every frame
