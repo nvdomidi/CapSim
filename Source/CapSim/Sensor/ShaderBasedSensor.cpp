@@ -5,8 +5,6 @@
 
 bool AShaderBasedSensor::AddPostProcessingMaterial(const FString &Path)
 {
-  UE_LOG(LogTemp, Warning, TEXT("MatLoad: %s"), *Path);
-
   ConstructorHelpers::FObjectFinder<UMaterial> Loader(*Path);
   if (Loader.Succeeded())
   {
@@ -21,15 +19,12 @@ bool AShaderBasedSensor::AddPostProcessingMaterial(const FString &Path)
 
 void AShaderBasedSensor::SetUpSceneCaptureComponent(USceneCaptureComponent2D &SceneCapture)
 {
-    UE_LOG(LogTemp, Warning, TEXT("callingfunction SetupSceneCaptureComponent, Materials found: %d"), MaterialsFound.Num());
 
   for (const auto &MaterialFound : MaterialsFound)
   {
     // Create a dynamic instance of the Material (Shader)
     AddShader({UMaterialInstanceDynamic::Create(MaterialFound, this), 1.0});
-
-
-    UE_LOG(LogTemp, Warning, TEXT("MatLoader: %s"), *(MaterialFound->GetFName().ToString()));
+    UE_LOG(LogTemp, Warning, TEXT("Postprocess material: %s"), *(MaterialFound->GetFName().ToString()));
   }
 
   for (const auto &Shader : Shaders)
@@ -51,40 +46,93 @@ void AShaderBasedSensor::SetUpSceneCaptureComponent(USceneCaptureComponent2D &Sc
 // Blueprint callable functions to edit shader parameters
 void AShaderBasedSensor::SetLensCircleFallOff(float val)
 {
-    this->SetFloatShaderParameter(0, TEXT("CircleFalloff_NState"), val);
+    if (IsDistortionNegative()) {
+        Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+            TEXT("CircleFalloff_NState"),
+            val);
+    }
+    else {
+        Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+            TEXT("CircleFalloff_PState"),
+            val);
+    }
 }
 
 void AShaderBasedSensor::SetLensCircleMultiplier(float val)
 {
-    //this->SetFloatShaderParameter(0, TEXT("CircleMultiplier_NState"), val);
-
-    Shaders[0].PostProcessMaterial->SetScalarParameterValue(
-        TEXT("CircleMultiplier_NState"),
-        val);
-
-    //CaptureComponent2D->PostProcessSettings.RemoveBlendable(Shaders[0].PostProcessMaterial);
-    UE_LOG(LogTemp, Warning, TEXT("MatLoader: SetLensCircleMultiplier"));
-
+    if (IsDistortionNegative()) {
+        Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+            TEXT("CircleMultiplier_NState"),
+            val);
+    }
+    else {
+        Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+            TEXT("CircleMultiplier_PState"),
+            val);
+    }
 }
 
 void AShaderBasedSensor::SetLensK(float val)
 {
-    this->SetFloatShaderParameter(0, TEXT("K_NState"), val);
+    if (IsDistortionNegative()) {
+        Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+            TEXT("K_NState"),
+            val);
+    }
+    else {
+        Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+            TEXT("K_PState"),
+            val);
+    }
 }
 
 void AShaderBasedSensor::SetLensKCube(float val)
 {
-    this->SetFloatShaderParameter(0, TEXT("kcube"), val);
+    Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+        TEXT("kcube"),
+        val);
 }
 
 void AShaderBasedSensor::SetLensXSize(float val)
 {
-    this->SetFloatShaderParameter(0, TEXT("XSize_NState"), val);
+    if (IsDistortionNegative()) {
+        Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+            TEXT("XSize_NState"),
+            val);
+    }
+    else {
+        Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+            TEXT("XSize_PState"),
+            val);
+    }
 }
 
 void AShaderBasedSensor::SetLensYSize(float val)
 {
-    this->SetFloatShaderParameter(0, TEXT("YSize_NState"), val);
+    if (IsDistortionNegative()) {
+        Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+            TEXT("YSize_NState"),
+            val);
+    }
+    else {
+        Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+            TEXT("YSize_PState"),
+            val);
+    }
+}
+
+void AShaderBasedSensor::SetDistortionNegative()
+{
+    Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+        TEXT("IsNegative"),
+        1);
+}
+
+void AShaderBasedSensor::SetDistortionPositive()
+{
+    Shaders[0].PostProcessMaterial->SetScalarParameterValue(
+        TEXT("IsNegative"),
+        0);
 }
 
 /*  ------------------------------------------------------------------   */
@@ -106,4 +154,17 @@ void AShaderBasedSensor::UpdateFloatShaderParameter(uint8_t ShaderIndex, const F
             FloatParam.Value = Value;
         }
     }
+}
+
+// helper function to check distortion negative or not
+bool AShaderBasedSensor::IsDistortionNegative()
+{
+    float IsNegative;
+    // check for negative or positive state
+    Shaders[0].PostProcessMaterial->GetScalarParameterValue(TEXT("IsNegative"), IsNegative);
+
+    if (IsNegative > 0.5f)
+        return true;
+    else
+        return false;
 }

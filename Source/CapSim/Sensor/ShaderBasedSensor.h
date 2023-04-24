@@ -84,6 +84,11 @@ public:
   UFUNCTION(BlueprintCallable)
   void SetLensYSize(float val = 0.08f);
 
+  UFUNCTION(BlueprintCallable)
+  void SetDistortionNegative();
+
+  UFUNCTION(BlueprintCallable)
+  void SetDistortionPositive();
 
 
   void SetFloatShaderParameter(uint8_t ShaderIndex, const FName &ParameterName, float Value);
@@ -93,6 +98,8 @@ public:
 protected:
 
   void SetUpSceneCaptureComponent(USceneCaptureComponent2D &SceneCapture) override;
+
+  bool IsDistortionNegative();
 
 private:
 
