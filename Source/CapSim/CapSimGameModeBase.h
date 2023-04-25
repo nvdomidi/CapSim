@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "CapSim/Game/CapSimEngine.h"
-
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "CapSimGameModeBase.generated.h"
@@ -19,6 +17,4 @@ class CAPSIM_API ACapSimGameModeBase : public AGameModeBase
 protected:
 	virtual void BeginPlay() override;
 	
-//private:
-	//FCapSimEngine CapSimEngine;
 };
