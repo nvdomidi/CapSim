@@ -47,7 +47,7 @@ public:
 
   AShaderBasedSensor() : Super()
   {
-
+      PrimaryActorTick.bCanEverTick = true;
   }
 
   /// Load the UMaterialInstanceDynamic at the given @a Path and
@@ -111,4 +111,6 @@ private:
 
   UPROPERTY()
   TArray<FShaderFloatParameterValue> FloatShaderParams;
+
+  bool bIsSetUp = false;
 };

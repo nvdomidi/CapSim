@@ -19,12 +19,11 @@ bool AShaderBasedSensor::AddPostProcessingMaterial(const FString &Path)
 
 void AShaderBasedSensor::SetUpSceneCaptureComponent(USceneCaptureComponent2D &SceneCapture)
 {
-
   for (const auto &MaterialFound : MaterialsFound)
   {
-    // Create a dynamic instance of the Material (Shader)
-    AddShader({UMaterialInstanceDynamic::Create(MaterialFound, this), 1.0});
-    UE_LOG(LogTemp, Warning, TEXT("Postprocess material: %s"), *(MaterialFound->GetFName().ToString()));
+          // Create a dynamic instance of the Material (Shader)
+          AddShader({ UMaterialInstanceDynamic::Create(MaterialFound, this), 1.0 });
+          UE_LOG(LogTemp, Warning, TEXT("Postprocess material: %s"), *(MaterialFound->GetFName().ToString()));
   }
 
   for (const auto &Shader : Shaders)

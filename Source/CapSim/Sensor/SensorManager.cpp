@@ -16,11 +16,9 @@ ASensorManager::ASensorManager()
 
 void ASensorManager::PostPhysTick(UWorld* World, ELevelTick TickType, float DeltaSeconds)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Ticking in SensorManager 2222"));
-	UE_LOG(LogTemp, Warning, TEXT("%d"), SensorList.Num());
+	
 	for (ASensor* Sensor : SensorList)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Ticking in Snesor"));
 		Sensor->PostPhysTickInternal(World, TickType, DeltaSeconds);
 	}
 }

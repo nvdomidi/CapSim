@@ -18,6 +18,7 @@ public:
 protected:
 
   void BeginPlay() override;
+  virtual void Tick(float DeltaTime) override;
   void PostPhysTick(UWorld *World, ELevelTick TickType, float DeltaSeconds) override;
 
   UFUNCTION(BlueprintCallable, Category = "CapSim")

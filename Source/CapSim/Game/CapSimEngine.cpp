@@ -2,13 +2,13 @@
 
 int FCapSimEngine::frame = 0;
 
-void FCapSimEngine::NotifyInitGame(ASensorManager* Manager)
+void FCapSimEngine::NotifyInitGame(ASensorManager* _SensorManager)
 {
 	if(!bIsRunning){
 		bIsRunning = true;
-		
-		this->SensorManager = Manager;
 
+		this->SensorManager = _SensorManager;
+		
 		OnPreTickHandle = FWorldDelegates::OnWorldTickStart.AddRaw(
 			this,
 			&FCapSimEngine::OnPreTick);
@@ -16,7 +16,6 @@ void FCapSimEngine::NotifyInitGame(ASensorManager* Manager)
 		OnPostTickHandle = FWorldDelegates::OnWorldPostActorTick.AddRaw(
 			this,
 			&FCapSimEngine::OnPostTick);
-	
 	}
 }
 
@@ -35,7 +34,10 @@ void FCapSimEngine::OnPreTick(UWorld* World, ELevelTick TickType, float DeltaSec
 
 void FCapSimEngine::OnPostTick(UWorld* World, ELevelTick TickType, float DeltaSeconds)
 {
-	SensorManager->PostPhysTick(World, TickType, DeltaSeconds);
+	if (this->SensorManager == nullptr)
+		return;
+
+	this->SensorManager->PostPhysTick(World, TickType, DeltaSeconds);
 	frame++;
 }
 

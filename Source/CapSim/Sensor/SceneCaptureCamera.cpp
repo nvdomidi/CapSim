@@ -7,23 +7,29 @@
 ASceneCaptureCamera::ASceneCaptureCamera() : Super()
 {
     // TODO: Add post-processing material
-    
+    PrimaryActorTick.bCanEverTick = true;
+
     AddPostProcessingMaterial(
         TEXT("Material'/Game/PostProcessingMaterials/PhysicLensDistortion'"));
 }
 
 void ASceneCaptureCamera::BeginPlay()
 {
-  
+    Super::BeginPlay();
+}
+
+void ASceneCaptureCamera::Tick(float DeltaTime)
+{
+    UE_LOG(LogTemp, Warning, TEXT("ticking in scenecapturecamera"));
+    Super::Tick(DeltaTime);
 }
 
 
 void ASceneCaptureCamera::PostPhysTick(UWorld *World, ELevelTick TickType, float DeltaSeconds)
 {
+    UE_LOG(LogTemp, Warning, TEXT("SceneCaptureCamera 123123"));
     if (bIsRecording)
     {
-        UE_LOG(LogTemp, Warning, TEXT("PostPhysTick in SceneCaptureCamera, deltaSeconds: %f"), DeltaSeconds);
-
         FString filePath = FString::Printf(TEXT("%s/%d.png"), *this->folderPath, FCapSimEngine::GetFrameCounter());
 
         FPixelReader::SendPixelsInRenderThread<ASceneCaptureCamera, FColor>(*this, filePath);

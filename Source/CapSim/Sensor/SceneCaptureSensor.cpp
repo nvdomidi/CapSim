@@ -445,9 +445,6 @@ void ASceneCaptureSensor::ApplyPostProcessing()
     CaptureComponent2D->Deactivate();
     CaptureComponent2D->TextureTarget = CaptureRenderTarget;
 
-    // Call derived classes to set up their things.
-    SetUpSceneCaptureComponent(*CaptureComponent2D);
-
     CaptureComponent2D->CaptureSource = ESceneCaptureSource::SCS_FinalColorLDR;
 
     CaptureComponent2D->UpdateContent();

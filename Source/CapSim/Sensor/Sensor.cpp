@@ -15,7 +15,6 @@ ASensor::ASensor()
 void ASensor::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -45,7 +44,6 @@ void ASensor::PostPhysTickInternal(UWorld* World, ELevelTick TickType, float Del
 {
 	if (ReadyToTick) {
 		PostPhysTick(World, TickType, DeltaSeconds);
-		UE_LOG(LogTemp, Warning, TEXT("Tick from sensor"));
 		ReadyToTick = false;
 	}
 }

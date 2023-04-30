@@ -12,14 +12,19 @@ void ACapSimTool::BeginPlay()
 
 void ACapSimTool::InitializeCapSim()
 {
-	this->SensorManager = GetWorld()->SpawnActor<ASensorManager>(ASensorManager::StaticClass());
+	auto SensorManager = GetWorld()->SpawnActor<ASensorManager>(ASensorManager::StaticClass());
+	
+	//UE_LOG(LogTemp, Warning, TEXT("SensorManager in CapSim ADDRESS: %p\n"), (void*)&(SensorManager));
+	
 	CapSimEngine.NotifyInitGame(SensorManager);
+
 }
 
 ASceneCaptureCamera* ACapSimTool::AddSceneCaptureCamera()
 {
 	auto SceneCaptureCamera = GetWorld()->SpawnActor<ASceneCaptureCamera>(ASceneCaptureCamera::StaticClass());
-	this->SensorManager->AddSensor(SceneCaptureCamera);
+	
+	CapSimEngine.SensorManager->AddSensor(SceneCaptureCamera);
 
 	return SceneCaptureCamera;
 }

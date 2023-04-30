@@ -22,8 +22,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CapSim")
 	ASceneCaptureCamera* AddSceneCaptureCamera();
 
-	//UFUNCTION(BlueprintCallable, Category = "CapSim")
-
 protected:
 
 	void BeginPlay() override;
@@ -31,7 +29,5 @@ protected:
 private:
 
 	FCapSimEngine CapSimEngine;
-
-	ASensorManager* SensorManager;
 
 };

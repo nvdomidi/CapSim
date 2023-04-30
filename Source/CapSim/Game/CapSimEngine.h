@@ -8,14 +8,14 @@
 class FCapSimEngine : private NonCopyable
 {
 public:
-
-	void NotifyInitGame(ASensorManager* Manager);
-
+	
 	~FCapSimEngine();
 
-	ASensorManager* SensorManager;
+	void NotifyInitGame(ASensorManager* _SensorManager);
 
 	static int GetFrameCounter() { return frame; }
+
+	ASensorManager* SensorManager;
 
 private:
 
@@ -28,6 +28,4 @@ private:
 	void OnPreTick(UWorld* World, ELevelTick TickType, float DeltaSeconds);
 	void OnPostTick(UWorld* World, ELevelTick TickType, float DeltaSeconds);
 
-	
-	
 };
