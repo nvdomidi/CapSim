@@ -15,6 +15,8 @@ public:
 
   ASceneCaptureCamera();
 
+  AActor* Ball;
+
 protected:
 
   void BeginPlay() override;

@@ -1,5 +1,6 @@
 #include "CapSim/Sensor/SceneCaptureCamera.h"
 #include "CapSim/Game/CapSimEngine.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "Runtime/RenderCore/Public/RenderingThread.h"
 
@@ -16,23 +17,35 @@ ASceneCaptureCamera::ASceneCaptureCamera() : Super()
 void ASceneCaptureCamera::BeginPlay()
 {
     Super::BeginPlay();
+
+    TArray<AActor*> FoundActors;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), FoundActors);
+    
+    for (auto& act : FoundActors)
+    {
+        if (act->GetFName() == FName("Sphere3_Blueprint")) {
+            Ball = act;
+        }
+    }
 }
 
 void ASceneCaptureCamera::Tick(float DeltaTime)
 {
-    UE_LOG(LogTemp, Warning, TEXT("ticking in scenecapturecamera"));
     Super::Tick(DeltaTime);
 }
 
 
 void ASceneCaptureCamera::PostPhysTick(UWorld *World, ELevelTick TickType, float DeltaSeconds)
 {
-    UE_LOG(LogTemp, Warning, TEXT("SceneCaptureCamera 123123"));
     if (bIsRecording)
     {
         FString filePath = FString::Printf(TEXT("%s/%d.png"), *this->folderPath, FCapSimEngine::GetFrameCounter());
 
         FPixelReader::SendPixelsInRenderThread<ASceneCaptureCamera, FColor>(*this, filePath);
+
+        FString filePathLabel = FString::Printf(TEXT("%s/%d.txt"), *this->folderPath, FCapSimEngine::GetFrameCounter());
+
+        FFileHelper::SaveStringToFile(Ball->GetActorLocation().ToString(), *filePathLabel);
     }
 }
 
