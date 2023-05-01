@@ -15,7 +15,7 @@ public:
 
   ASceneCaptureCamera();
 
-  AActor* Ball;
+  AActor* Ball = nullptr;
 
 protected:
 

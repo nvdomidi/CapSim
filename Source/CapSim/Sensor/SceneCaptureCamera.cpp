@@ -43,9 +43,12 @@ void ASceneCaptureCamera::PostPhysTick(UWorld *World, ELevelTick TickType, float
 
         FPixelReader::SendPixelsInRenderThread<ASceneCaptureCamera, FColor>(*this, filePath);
 
-        FString filePathLabel = FString::Printf(TEXT("%s/%d.txt"), *this->folderPath, FCapSimEngine::GetFrameCounter());
+        if (Ball != nullptr)
+        {
+            FString filePathLabel = FString::Printf(TEXT("%s/%d.txt"), *this->folderPath, FCapSimEngine::GetFrameCounter());
 
-        FFileHelper::SaveStringToFile(Ball->GetActorLocation().ToString(), *filePathLabel);
+            FFileHelper::SaveStringToFile(Ball->GetActorLocation().ToString(), *filePathLabel);
+        }
     }
 }
 
