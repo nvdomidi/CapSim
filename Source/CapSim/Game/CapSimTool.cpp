@@ -2,7 +2,7 @@
 
 ACapSimTool::ACapSimTool() : Super()
 {
-	
+	TaggerDelegate = CreateDefaultSubobject<UTaggerDelegate>(TEXT("TaggerDelegate"));
 }
 
 void ACapSimTool::BeginPlay()
@@ -14,9 +14,11 @@ void ACapSimTool::InitializeCapSim()
 {
 	auto SensorManager = GetWorld()->SpawnActor<ASensorManager>(ASensorManager::StaticClass());
 	
-	//UE_LOG(LogTemp, Warning, TEXT("SensorManager in CapSim ADDRESS: %p\n"), (void*)&(SensorManager));
-	
 	CapSimEngine.NotifyInitGame(SensorManager);
+
+	if (TaggerDelegate != nullptr){
+		TaggerDelegate->RegisterSpawnHandler(GetWorld());
+	}
 
 }
 
@@ -27,4 +29,15 @@ ASceneCaptureCamera* ACapSimTool::AddSceneCaptureCamera()
 	CapSimEngine.SensorManager->AddSensor(SceneCaptureCamera);
 
 	return SceneCaptureCamera;
+}
+
+void ACapSimTool::AddSemanticSegmentationCamera()
+{
+	//auto SemanticSegmentationCamera = GetWorld()->SpawnActor<ASemanticSegmentationCamera>(ASemanticSegmentationCamera::StaticClass());
+
+	if (TaggerDelegate != nullptr) {
+		TaggerDelegate->SetSemanticSegmentationEnabled(true);
+	}
+
+	//ATagger::TagActorsInLevel(*World, true);
 }
