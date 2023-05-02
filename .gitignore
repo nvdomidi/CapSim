@@ -72,3 +72,8 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# Don't add this level and large assets
+Content/Maps/Gatwick*
+Content/Assets/airplane/*
+Content/Assets/Mesh_separate/*
