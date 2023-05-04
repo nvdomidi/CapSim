@@ -1,6 +1,6 @@
 #include "TaggerDelegate.h"
 
-//#include "Game/Tagger.h"
+#include "CapSim/Game/Tagger.h"
 
 #include "Engine/World.h"
 
@@ -15,6 +15,7 @@ void UTaggerDelegate::RegisterSpawnHandler(UWorld* InWorld)
 void UTaggerDelegate::OnActorSpawned(AActor* InActor)
 {
     if (InActor != nullptr) {
-        //ATagger::TagActor(*InActor, bSemanticSegmentationEnabled);
+        UE_LOG(LogTemp, Warning, TEXT("Actor spawned TaggerDelegate: %s"), *(InActor->GetFName().ToString()));
+        ATagger::TagActor(*InActor, bSemanticSegmentationEnabled);
     }
 }

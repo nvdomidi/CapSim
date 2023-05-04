@@ -25,8 +25,7 @@ public:
 
 	//TODO: change the output to semanticsegmentationcamera
 	UFUNCTION(BlueprintCallable, Category = "CapSim")
-	//ASemanticSegmentationCamera* AddSemanticSegmentationCamera();
-	void AddSemanticSegmentationCamera();
+	ASemanticSegmentationCamera* AddSemanticSegmentationCamera();
 
 protected:
 
