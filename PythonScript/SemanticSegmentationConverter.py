@@ -4,13 +4,13 @@ import cv2
 import numpy as np
 
 # read semantic segmentation image saved by unreal engine
-img = cv2.imread("22.png")
+img = cv2.imread("capture2_Segmentation.png")
 
 # convert to RGB
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB )
 
 # set some predefined colors (add more if needed)
-predefined_colors = [[0,0,0], [255,255,0], [0,255,255], [255,0,255], [255,255,255],
+predefined_colors = [[255,255,0], [0,255,255], [255,0,255], [255,255,255],
                      [255,0,0], [0,255,0], [0,0,255]]
 
 # get R channel (only R channel contains information)
@@ -28,6 +28,6 @@ for i in range(0, len(rchannel_vals)):
     img[x_where, y_where, :] = predefined_colors[i]
 
 # show image
-cv2.imshow('image', img)
+cv2.imwrite('image.png', img)
 
     
