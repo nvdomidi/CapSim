@@ -75,13 +75,13 @@ public:
 	ATagger();
 
 // TODO: check what this is for
-/*
+
 protected:
 
 #if WITH_EDITOR
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif // WITH_EDITOR
-*/
+
 
 private:
 	UPROPERTY(Category = "Tagger", EditAnywhere)

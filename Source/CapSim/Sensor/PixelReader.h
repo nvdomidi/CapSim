@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include "CapSim/Game/TaggedComponent.h"
 
 #include "CoreGlobals.h"
 #include "Engine/TextureRenderTarget2D.h"
@@ -64,6 +65,7 @@ void FPixelReader::SendPixelsInRenderThread(TSensor& Sensor, FString filePath, b
 
     /// Blocks until the render thread has finished all it's tasks.
     // TODO: Sensor.enqueue...
+
     Sensor.EnqueueRenderSceneImmediate();
 
     // TODO: SavePixelsToDisk, GetCaptureRenderTarget

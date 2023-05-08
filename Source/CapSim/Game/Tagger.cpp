@@ -136,7 +136,7 @@ void ATagger::TagActor(const AActor& Actor, bool bTagForSemanticSegmentation)
             continue;
         }
 
-        /*
+        
         // Find a tagged component that is attached to this component
         UTaggedComponent* TaggedComponent = NULL;
         TArray<USceneComponent*> AttachedComponents = Component->GetAttachChildren();
@@ -156,7 +156,7 @@ void ATagger::TagActor(const AActor& Actor, bool bTagForSemanticSegmentation)
             TaggedComponent = NewObject<UTaggedComponent>(Component);
             TaggedComponent->SetupAttachment(Component);
             TaggedComponent->RegisterComponent();
-
+            
             UE_LOG(LogTemp, Warning, TEXT("    - Added Tag"));
 
         }
@@ -168,7 +168,7 @@ void ATagger::TagActor(const AActor& Actor, bool bTagForSemanticSegmentation)
 
         TaggedComponent->SetColor(Color);
         TaggedComponent->MarkRenderStateDirty();
-        */
+        
     }
     
 
@@ -194,7 +194,7 @@ void ATagger::TagActor(const AActor& Actor, bool bTagForSemanticSegmentation)
             continue;
         }
 
-        /*
+        
         // Find a tagged component that is attached to this component
         UTaggedComponent* TaggedComponent = NULL;
         TArray<USceneComponent*> AttachedComponents = Component->GetAttachChildren();
@@ -227,7 +227,7 @@ void ATagger::TagActor(const AActor& Actor, bool bTagForSemanticSegmentation)
 
         TaggedComponent->SetColor(Color);
         TaggedComponent->MarkRenderStateDirty();
-        */
+        
     }
 }
 
@@ -330,7 +330,7 @@ ATagger::ATagger()
     PrimaryActorTick.bCanEverTick = false;
 }
 
-/*
+
 
 #if WITH_EDITOR
 void ATagger::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
@@ -345,4 +345,3 @@ void ATagger::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent
 }
 #endif // WITH_EDITOR
 
-*/

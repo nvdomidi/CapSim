@@ -1,6 +1,7 @@
 #include "CapSim/Game/CapSimEngine.h"
 
 int FCapSimEngine::frame = 0;
+bool FCapSimEngine::NotDrawTaggedComponents = true;
 
 void FCapSimEngine::NotifyInitGame(ASensorManager* _SensorManager)
 {

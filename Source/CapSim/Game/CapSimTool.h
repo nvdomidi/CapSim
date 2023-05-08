@@ -18,14 +18,18 @@ public:
 	ACapSimTool();
 
 	UFUNCTION(BlueprintCallable, Category = "CapSim")
-	void InitializeCapSim();
+		void InitializeCapSim();
 
 	UFUNCTION(BlueprintCallable, Category = "CapSim")
-	ASceneCaptureCamera* AddSceneCaptureCamera();
+		ASceneCaptureCamera* AddSceneCaptureCamera();
 
-	//TODO: change the output to semanticsegmentationcamera
 	UFUNCTION(BlueprintCallable, Category = "CapSim")
-	ASemanticSegmentationCamera* AddSemanticSegmentationCamera();
+		ASemanticSegmentationCamera* AddSemanticSegmentationCamera();
+
+	UFUNCTION(BlueprintCallable, Category = "CapSim")
+		AInstanceSegmentationCamera* AddInstanceSegmentationCamera();
+
+
 
 protected:
 
@@ -36,5 +40,5 @@ private:
 	FCapSimEngine CapSimEngine;
 
 	UPROPERTY()
-	UTaggerDelegate* TaggerDelegate = nullptr;
+		UTaggerDelegate* TaggerDelegate = nullptr;
 };

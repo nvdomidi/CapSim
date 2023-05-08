@@ -1,6 +1,7 @@
 #include "CapSim/Game/CapSimTool.h"
 #include "CapSim/Game/Tagger.h"
 #include "CapSim/Sensor/SemanticSegmentationCamera.h"
+#include "CapSim/Sensor/InstanceSegmentationCamera.h"
 
 ACapSimTool::ACapSimTool() : Super()
 {
@@ -15,13 +16,13 @@ void ACapSimTool::BeginPlay()
 void ACapSimTool::InitializeCapSim()
 {
 	auto SensorManager = GetWorld()->SpawnActor<ASensorManager>(ASensorManager::StaticClass());
-	
+
 	CapSimEngine.NotifyInitGame(SensorManager);
 
 	// TODO
 	//ATagger::TagActorsInLevel(*GetWorld(), true);
 
-	if (TaggerDelegate != nullptr){
+	if (TaggerDelegate != nullptr) {
 		TaggerDelegate->RegisterSpawnHandler(GetWorld());
 	}
 
@@ -30,7 +31,7 @@ void ACapSimTool::InitializeCapSim()
 ASceneCaptureCamera* ACapSimTool::AddSceneCaptureCamera()
 {
 	auto SceneCaptureCamera = GetWorld()->SpawnActor<ASceneCaptureCamera>(ASceneCaptureCamera::StaticClass());
-	
+
 	CapSimEngine.SensorManager->AddSensor(SceneCaptureCamera);
 
 	return SceneCaptureCamera;
@@ -49,4 +50,19 @@ ASemanticSegmentationCamera* ACapSimTool::AddSemanticSegmentationCamera()
 	ATagger::TagActorsInLevel(*GetWorld(), true);
 
 	return SemanticSegmentationCamera;
+}
+
+AInstanceSegmentationCamera* ACapSimTool::AddInstanceSegmentationCamera()
+{
+	auto InstanceSegmentationCamera = GetWorld()->SpawnActor<AInstanceSegmentationCamera>(AInstanceSegmentationCamera::StaticClass());
+
+	CapSimEngine.SensorManager->AddSensor(InstanceSegmentationCamera);
+
+	if (TaggerDelegate != nullptr) {
+		TaggerDelegate->SetSemanticSegmentationEnabled(true);
+	}
+
+	ATagger::TagActorsInLevel(*GetWorld(), true);
+
+	return InstanceSegmentationCamera;
 }

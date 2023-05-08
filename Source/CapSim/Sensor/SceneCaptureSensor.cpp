@@ -476,7 +476,8 @@ void ASceneCaptureSensor::CaptureSceneExtended()
 	CaptureComponent2D->CaptureScene();
 
 	//////////////////////////////// Added by Navid
-	FRenderTarget* RenderTargetResource = CaptureRenderTarget->GameThread_GetRenderTargetResource();
+	/*
+    FRenderTarget* RenderTargetResource = CaptureRenderTarget->GameThread_GetRenderTargetResource();
 	FReadSurfaceDataFlags ReadSurfaceDataFlags;
 	ReadSurfaceDataFlags.SetLinearToGamma(true); // adjust for sRGB encoding, if necessary
 	ReadSurfaceDataFlags.SetMip(0); // get the top mip level
@@ -487,7 +488,7 @@ void ASceneCaptureSensor::CaptureSceneExtended()
 	RenderTargetResource->ReadPixels(Pixels, ReadSurfaceDataFlags, Rect);
 
 	UE_LOG(LogTemp, Warning, TEXT("DATA HAS BEEN CAPTURED: %d"), Pixels.Num());
-
+    */
 	////////////////////////////////////////////////
 
 	/// <summary> Added by Navid: Lets save some stuff to the disk

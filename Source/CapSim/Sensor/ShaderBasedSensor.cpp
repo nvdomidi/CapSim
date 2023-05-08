@@ -1,5 +1,5 @@
 #include "CapSim/Sensor/ShaderBasedSensor.h"
-
+#include "CapSim/Game/CapSimEngine.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Materials/MaterialInstanceDynamic.h"
 
@@ -19,6 +19,7 @@ bool AShaderBasedSensor::AddPostProcessingMaterial(const FString &Path)
 
 void AShaderBasedSensor::SetUpSceneCaptureComponent(USceneCaptureComponent2D &SceneCapture)
 {
+
   for (const auto &MaterialFound : MaterialsFound)
   {
           // Create a dynamic instance of the Material (Shader)

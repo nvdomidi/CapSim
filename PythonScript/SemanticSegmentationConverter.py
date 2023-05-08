@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 # read semantic segmentation image saved by unreal engine
-img = cv2.imread("capture2_Segmentation.png")
+img = cv2.imread("321.png")
 
 # convert to RGB
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB )

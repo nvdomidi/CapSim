@@ -8,12 +8,15 @@
 class FCapSimEngine : private NonCopyable
 {
 public:
-	
+
 	~FCapSimEngine();
 
 	void NotifyInitGame(ASensorManager* _SensorManager);
 
 	static int GetFrameCounter() { return frame; }
+
+	static bool GetNotDrawTaggedComponents() { return NotDrawTaggedComponents; }
+	static void SetNotDrawTaggedComponents(bool bNotDrawTaggedComponents) { NotDrawTaggedComponents = bNotDrawTaggedComponents; }
 
 	ASensorManager* SensorManager;
 
@@ -21,6 +24,7 @@ private:
 
 	bool bIsRunning = false;
 	static int frame;
+	static bool NotDrawTaggedComponents;
 
 	FDelegateHandle OnPreTickHandle;
 	FDelegateHandle OnPostTickHandle;
