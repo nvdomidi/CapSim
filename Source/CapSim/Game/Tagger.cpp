@@ -246,6 +246,64 @@ void ATagger::TagActorsInLevel(ULevel& Level, bool bTagForSemanticSegmentation)
     }
 }
 
+void ATagger::RemoveTagActorsInLevel(UWorld& World)
+{
+    for (TActorIterator<AActor> it(&World); it; ++it) {
+        TArray<UStaticMeshComponent*> StaticMeshComponents;
+        (**it).GetComponents<UStaticMeshComponent>(StaticMeshComponents);
+        for (UStaticMeshComponent* Component : StaticMeshComponents) {
+
+            if (!Component->IsVisible() || !Component->GetStaticMesh())
+            {
+                continue;
+            }
+
+            UTaggedComponent* TaggedComponent = NULL;
+            TArray<USceneComponent*> AttachedComponents = Component->GetAttachChildren();
+            for (USceneComponent* SceneComponent : AttachedComponents) {
+                UTaggedComponent* TaggedSceneComponent = Cast<UTaggedComponent>(SceneComponent);
+                if (IsValid(TaggedSceneComponent)) {
+                    TaggedComponent = TaggedSceneComponent;
+
+                    TaggedComponent->DestroyComponent();
+
+                    break;
+                }
+            }
+        }
+
+    }
+}
+
+void ATagger::RemoveTagActorsInLevel(ULevel& Level)
+{
+    for (AActor* Actor : Level.Actors) {
+        TArray<UStaticMeshComponent*> StaticMeshComponents;
+        (*Actor).GetComponents<UStaticMeshComponent>(StaticMeshComponents);
+        for (UStaticMeshComponent* Component : StaticMeshComponents) {
+
+            if (!Component->IsVisible() || !Component->GetStaticMesh())
+            {
+                continue;
+            }
+
+            UTaggedComponent* TaggedComponent = NULL;
+            TArray<USceneComponent*> AttachedComponents = Component->GetAttachChildren();
+            for (USceneComponent* SceneComponent : AttachedComponents) {
+                UTaggedComponent* TaggedSceneComponent = Cast<UTaggedComponent>(SceneComponent);
+                if (IsValid(TaggedSceneComponent)) {
+                    TaggedComponent = TaggedSceneComponent;
+
+                    TaggedComponent->DestroyComponent();
+
+                    break;
+                }
+            }
+        }
+
+    }
+}
+
 
 void ATagger::GetTagsOfTaggedActor(const AActor& Actor, TSet<CapSimObjectLabel>& Tags)
 {

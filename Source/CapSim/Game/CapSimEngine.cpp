@@ -26,6 +26,9 @@ FCapSimEngine::~FCapSimEngine()
 		FWorldDelegates::OnWorldTickStart.Remove(OnPreTickHandle);
 		FWorldDelegates::OnWorldPostActorTick.Remove(OnPostTickHandle);
 	}
+
+	frame = 0;
+	NotDrawTaggedComponents = true;
 }
 
 void FCapSimEngine::OnPreTick(UWorld* World, ELevelTick TickType, float DeltaSeconds)

@@ -4,15 +4,21 @@ import cv2
 import numpy as np
 
 # read instance segmentation image saved by unreal engine
-img = cv2.imread("320.png")
+img = cv2.imread("23.png")
+
+#print(img[:10,:10,:])
 
 # convert to RGB
 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB )
 
+
+
 # set some predefined colors (add more if needed)
 predefined_colors = [[255,255,0], [0,255,255], [255,0,255], [255,255,255],
                      [255,0,0], [0,255,0], [0,0,255], [0,0,0], [160,0,160],
-                     [0,160,160],  [160,160,0],  [160,160,160]]
+                     [0,160,160],  [160,160,0],  [160,160,160], [160,0,0],
+                     [0,160,0], [0,0,160], [80,80,80], [0,0,80], [0,80,0],
+                     [80,0,0], [80,80,0]]
 
 # get R channel (only R channel contains information)
 rchannel = img[:,:,0]
@@ -46,7 +52,7 @@ for i in range(0, unique_ids.shape[1]):
 
 
 channels_stacked = np.vstack((rchannel_flatten, gchannel_flatten, bchannel_flatten))
-print(np.unique(channels_stacked, axis=1))
+print(np.unique(channels_stacked, axis=1)/255)
 
 
 cv2.imshow('img', img)

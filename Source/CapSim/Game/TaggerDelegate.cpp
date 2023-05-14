@@ -7,6 +7,11 @@
 UTaggerDelegate::UTaggerDelegate() :
     ActorSpawnedDelegate(FOnActorSpawned::FDelegate::CreateUObject(this, &UTaggerDelegate::OnActorSpawned)) {}
 
+UTaggerDelegate::~UTaggerDelegate()
+{
+    
+}
+
 void UTaggerDelegate::RegisterSpawnHandler(UWorld* InWorld)
 {
     InWorld->AddOnActorSpawnedHandler(ActorSpawnedDelegate);

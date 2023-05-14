@@ -5,8 +5,6 @@
 
 bool FPixelReader::WritePixelsToArray(UTextureRenderTarget2D& RenderTarget, TArray<FColor>& BitMap)
 {
-	// Added by Navid
-	UE_LOG(LogTemp, Warning, TEXT("Writing Pixels to Array, IsInGameThread?: %d"), IsInGameThread());
 
 	check(IsInGameThread());
 	FTextureRenderTargetResource* RTResource =
@@ -27,7 +25,22 @@ bool FPixelReader::WritePixelsToArray(UTextureRenderTarget2D& RenderTarget, TArr
 
 	//return smth;
 
-	return RTResource->ReadPixels(BitMap, ReadPixelFlags);
+	//return RTResource->ReadPixels(BitMap, ReadPixelFlags);
+
+	if (RTResource->ReadPixels(BitMap, ReadPixelFlags))
+	{
+		TSet<FColor> distinctElements;
+		for (int i = 0; i < BitMap.Num(); i++) {
+			distinctElements.Add(BitMap[i]);
+		}
+
+		UE_LOG(LogTemp, Warning, TEXT("in pixelReader yo123: %d"), distinctElements.Num());
+
+		return true;
+	}
+	else
+		return false;
+
 }
 
 TUniquePtr<TImagePixelData<FColor>> FPixelReader::DumpPixels(UTextureRenderTarget2D& RenderTarget)
@@ -43,24 +56,22 @@ TUniquePtr<TImagePixelData<FColor>> FPixelReader::DumpPixels(UTextureRenderTarge
 		return nullptr;
 	}
 
-
-	UE_LOG(LogTemp, Warning, TEXT("In DumpPixels, the number of pixels in Pixels: %d"), Pixels.Num());
-
-	// Added by Navid
-	UE_LOG(LogTemp, Warning, TEXT("NOT NULL, Returning PixelData"));
-
-	UE_LOG(LogTemp, Warning, TEXT("In DumpPixels, the number of pixels in pixeldata BEFORE COPY: %d"), PixelData->Pixels.Num());
-
 	PixelData->Pixels.Empty();
 	PixelData->Pixels.Append(Pixels);
 
-	UE_LOG(LogTemp, Warning, TEXT("In DumpPixels, the number of pixels in pixeldata AFTER COPY: %d"), PixelData->Pixels.Num());
+	
+
 	return PixelData;
 }
 
 TFuture<bool> FPixelReader::SavePixelsToDisk(UTextureRenderTarget2D& RenderTarget, const FString& FilePath)
 {
 	return SavePixelsToDisk(DumpPixels(RenderTarget), FilePath);
+}
+
+TFuture<bool> FPixelReader::SavePixelsToDisk2(UTextureRenderTarget2D& RenderTarget, const FString& FilePath)
+{
+	return SavePixelsToDisk2(DumpPixels(RenderTarget), FilePath);
 }
 
 TFuture<bool> FPixelReader::SavePixelsToDisk(TUniquePtr<TImagePixelData<FColor>> PixelData, const FString& FilePath)
@@ -80,6 +91,34 @@ TFuture<bool> FPixelReader::SavePixelsToDisk(TUniquePtr<TImagePixelData<FColor>>
 	FHighResScreenshotConfig& HighResScreenshotConfig = GetHighResScreenshotConfig();
 	return HighResScreenshotConfig.ImageWriteQueue->Enqueue(MoveTemp(ImageTask));
 	
+
+	return TFuture<bool>();
+}
+
+TFuture<bool> FPixelReader::SavePixelsToDisk2(TUniquePtr<TImagePixelData<FColor>> PixelData, const FString& FilePath)
+{
+
+	// Added by Navid
+	UE_LOG(LogTemp, Warning, TEXT("Instance segmentation saving"));
+
+	TSet<FColor> distinctElements;
+	for (int i = 0; i < PixelData->Pixels.Num(); i++) {
+		distinctElements.Add(PixelData->Pixels[i]);
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("yo234: %d"), distinctElements.Num());
+
+	TUniquePtr<FImageWriteTask> ImageTask = MakeUnique<FImageWriteTask>();
+	ImageTask->PixelData = MoveTemp(PixelData);
+	ImageTask->Filename = FilePath;
+	ImageTask->Format = EImageFormat::PNG;
+	ImageTask->CompressionQuality = (int32)EImageCompressionQuality::Uncompressed;
+	//ImageTask->CompressionQuality = (int32)EImageCompressionQuality::Default;
+	ImageTask->bOverwriteFile = true;
+
+	FHighResScreenshotConfig& HighResScreenshotConfig = GetHighResScreenshotConfig();
+	return HighResScreenshotConfig.ImageWriteQueue->Enqueue(MoveTemp(ImageTask));
+
 
 	return TFuture<bool>();
 }

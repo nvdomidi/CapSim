@@ -14,6 +14,8 @@ public:
 
     UTaggerDelegate();
 
+    ~UTaggerDelegate();
+
     void RegisterSpawnHandler(UWorld* World);
 
     void SetSemanticSegmentationEnabled(bool Enable = true)

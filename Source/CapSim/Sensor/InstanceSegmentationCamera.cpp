@@ -13,18 +13,26 @@ AInstanceSegmentationCamera::AInstanceSegmentationCamera() : Super()
     // World->AddOnActorSpawnedHandler(FOnActorSpawned::FDelegate::CreateRaw(this, &AInstanceSegmentationCamera::OnActorSpawned));
 }
 
+void AInstanceSegmentationCamera::BeginPlay()
+{
+    bEnablePostProcessingEffects = false;
+    Super::BeginPlay();
+}
+
 void AInstanceSegmentationCamera::SetUpSceneCaptureComponent(USceneCaptureComponent2D& SceneCapture)
 {
     Super::SetUpSceneCaptureComponent(SceneCapture);
+    
+    //SceneCapture.ShowFlags.
 
     ApplyViewMode(VMI_Unlit, true, SceneCapture.ShowFlags);
+
 
     // TODO: NotDrawTaggedComponents
     //SceneCapture.ShowFlags.SetNotDrawTaggedComponents(false); // TaggedComponent detects this and sets view relevance for proxy material
     //FCapSimEngine::SetNotDrawTaggedComponents(false);
 
     //SceneCapture.ShowFlags.RegisterCustomShowFlag(TEXT("NotDrawTaggedComponents"), true, EShowFlagGroup::SFG_Custom, FText::FromString(TEXT("Dont draw tagged components if enabled")));
-
     SceneCapture.ShowFlags.SetAtmosphere(false);
 
     SceneCapture.PrimitiveRenderMode = ESceneCapturePrimitiveRenderMode::PRM_UseShowOnlyList;
@@ -54,6 +62,7 @@ void AInstanceSegmentationCamera::PostPhysTick(UWorld* World, ELevelTick TickTyp
         UPrimitiveComponent* Component = Cast<UPrimitiveComponent>(Object);
         SceneCapture->ShowOnlyComponents.Emplace(Component);
     }
+
     
     
     if (bIsRecording)
@@ -63,7 +72,7 @@ void AInstanceSegmentationCamera::PostPhysTick(UWorld* World, ELevelTick TickTyp
         
         // Sets the view relevance for the tagged components
         FCapSimEngine::SetNotDrawTaggedComponents(false);
-        FPixelReader::SendPixelsInRenderThread<AInstanceSegmentationCamera, FColor>(*this, filePath);
+        FPixelReader::SendPixelsInRenderThread2<AInstanceSegmentationCamera, FColor>(*this, filePath);
         FCapSimEngine::SetNotDrawTaggedComponents(true);
     }
 }
@@ -87,7 +96,7 @@ void AInstanceSegmentationCamera::CaptureScene(FString path)
 {
     if (path.IsEmpty())
     {
-        path = FString::Printf(TEXT("%s/capture.png"), *this->folderPath);
+        path = FString::Printf(TEXT("%s/capture.jpg"), *this->folderPath);
     }
 
     USceneCaptureComponent2D* SceneCapture = GetCaptureComponent2D();
@@ -101,7 +110,7 @@ void AInstanceSegmentationCamera::CaptureScene(FString path)
     }
 
     FCapSimEngine::SetNotDrawTaggedComponents(false);
-    FPixelReader::SendPixelsInRenderThread<AInstanceSegmentationCamera, FColor>(*this, path);
+    FPixelReader::SendPixelsInRenderThread2<AInstanceSegmentationCamera, FColor>(*this, path);
     FCapSimEngine::SetNotDrawTaggedComponents(true);
 }
 

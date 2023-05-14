@@ -32,6 +32,11 @@ public:
 
 	static void TagActorsInLevel(ULevel& Level, bool bTagForSemanticSegmentation);
 
+	//Added by navid
+	static void RemoveTagActorsInLevel(UWorld& World);
+	static void RemoveTagActorsInLevel(ULevel& Level);
+
+
 	/// Retrieve the tag of an already tagged component.
 	static CapSimObjectLabel GetTagOfTaggedComponent(const UPrimitiveComponent& Component)
 	{
