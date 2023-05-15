@@ -25,7 +25,7 @@ void AInstanceSegmentationCamera::SetUpSceneCaptureComponent(USceneCaptureCompon
     
     //SceneCapture.ShowFlags.
 
-    ApplyViewMode(VMI_Unlit, true, SceneCapture.ShowFlags);
+    ApplyViewMode(VMI_Lit, true, SceneCapture.ShowFlags);
 
 
     // TODO: NotDrawTaggedComponents

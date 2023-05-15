@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 # read instance segmentation image saved by unreal engine
-img = cv2.imread("23.png")
+img = cv2.imread("10.png")
 
 #print(img[:10,:10,:])
 
@@ -56,16 +56,4 @@ print(np.unique(channels_stacked, axis=1)/255)
 
 
 cv2.imshow('img', img)
-
-'''
-# for every unique value set one of predefined colors
-for i in range(0, len(rchannel_vals)):
-    x_where = np.where(img[:,:,0] == rchannel_vals[i])[0]
-    y_where = np.where(img[:,:,0] == rchannel_vals[i])[1]
-
-    img[x_where, y_where, :] = predefined_colors[i]
-
-# show image
 cv2.imwrite('image.png', img)
-'''
-    

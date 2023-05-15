@@ -249,10 +249,6 @@ FTaggedStaticMeshSceneProxy::FTaggedStaticMeshSceneProxy(UStaticMeshComponent* C
 
 		for (FLODInfo::FSectionInfo& SectionInfo : LODInfo.Sections) {
 			SectionInfo.Material = TaggedMaterialInstance;
-			FLinearColor a;
-			SectionInfo.Material->GetVectorParameterValue(TEXT("AnnotationColor"), a);
-
-			UE_LOG(LogTemp, Warning, TEXT("SectionInfo color: %s"), *(a.ToString()));
 		}
 	}
 }
@@ -268,11 +264,6 @@ FPrimitiveViewRelevance FTaggedStaticMeshSceneProxy::GetViewRelevance(const FSce
 	ViewRelevance.bDrawRelevance = ViewRelevance.bDrawRelevance && !FCapSimEngine::GetNotDrawTaggedComponents();
 
 	ViewRelevance.bShadowRelevance = false;
-
-	FLinearColor a;
-	TaggedMaterialInstance->GetVectorParameterValue(TEXT("AnnotationColor"), a);
-	
-	UE_LOG(LogTemp, Warning, TEXT("In view relevance annotationcolor is: %s"), *(a.ToString()));
 
 	return ViewRelevance;
 }
