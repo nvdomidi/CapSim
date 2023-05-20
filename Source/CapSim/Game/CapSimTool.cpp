@@ -2,6 +2,7 @@
 #include "CapSim/Game/Tagger.h"
 #include "CapSim/Sensor/SemanticSegmentationCamera.h"
 #include "CapSim/Sensor/InstanceSegmentationCamera.h"
+#include "CapSim/Sensor/DepthCamera.h"
 
 ACapSimTool::ACapSimTool() : Super()
 {
@@ -54,4 +55,13 @@ AInstanceSegmentationCamera* ACapSimTool::AddInstanceSegmentationCamera()
 	CapSimEngine.SensorManager->AddSensor(InstanceSegmentationCamera);
 
 	return InstanceSegmentationCamera;
+}
+
+ADepthCamera* ACapSimTool::AddDepthCamera()
+{
+	auto DepthCamera = GetWorld()->SpawnActor<ADepthCamera>(ADepthCamera::StaticClass());
+
+	CapSimEngine.SensorManager->AddSensor(DepthCamera);
+
+	return DepthCamera;
 }

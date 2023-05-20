@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CapSim")
 		AInstanceSegmentationCamera* AddInstanceSegmentationCamera();
 
+	UFUNCTION(BlueprintCallable, Category = "CapSim")
+		ADepthCamera* AddDepthCamera();
+
 
 
 protected:

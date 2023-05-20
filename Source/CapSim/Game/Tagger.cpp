@@ -15,6 +15,7 @@ static auto CastEnum(T label)
 }
 
 /* CARLA
+*
 * 
 crp::CityObjectLabel ATagger::GetLabelByFolderName(const FString& String) {
 	if (String == "Building")     return crp::CityObjectLabel::Buildings;
@@ -47,6 +48,7 @@ crp::CityObjectLabel ATagger::GetLabelByFolderName(const FString& String) {
 	else if (String == "Train")        return crp::CityObjectLabel::Train;
 	else                               return crp::CityObjectLabel::None;
 }
+*
 */
 
 CapSimObjectLabel ATagger::GetLabelByFolderName(const FString& String) {

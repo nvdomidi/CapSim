@@ -101,8 +101,6 @@ protected:
 
   bool IsDistortionNegative();
 
-private:
-
   UPROPERTY()
   TArray<UMaterial*> MaterialsFound;
 

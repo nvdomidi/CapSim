@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 # read instance segmentation image saved by unreal engine
-img = cv2.imread("10.png")
+img = cv2.imread("capture_instance.png")
 
 #print(img[:10,:10,:])
 
