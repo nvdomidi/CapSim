@@ -2,6 +2,8 @@
 
 #include "CapSim/Game/CapSimEngine.h"
 #include "CapSim/Sensor/PixelReader.h"
+#include "CapSim/Sensor/LidarDescription.h"
+#include "CapSim/Sensor/SemanticLidarData.h"
 
 
 ADepthCamera::ADepthCamera() : Super()
