@@ -8,7 +8,7 @@ public class CapSim : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "ImageWriteQueue", "RHI", "RenderCore", "Renderer"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "ImageWriteQueue", "RHI", "RenderCore", "Renderer", "PhysX", "PhysicsCore"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {});
 

@@ -65,3 +65,12 @@ ADepthCamera* ACapSimTool::AddDepthCamera()
 
 	return DepthCamera;
 }
+
+ARayCastSemanticLidar* ACapSimTool::AddSemanticLidar()
+{
+	auto SemanticLidar = GetWorld()->SpawnActor<ARayCastSemanticLidar>(ARayCastSemanticLidar::StaticClass());
+
+	CapSimEngine.SensorManager->AddSensor(SemanticLidar);
+
+	return SemanticLidar;
+}

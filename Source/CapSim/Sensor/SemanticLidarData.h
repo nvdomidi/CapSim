@@ -5,6 +5,9 @@
 #include <vector>
 #include <numeric>
 
+#include <streambuf>
+#include "Misc/OutputDevice.h"
+
 #include "Math/Vector.h"
 
 
@@ -32,6 +35,9 @@
   ///      Xn, Yn, Zn, Cos(THn), idx_n, tag_n
   ///    }
   ///
+  /// 
+  /// 
+
 
   class SemanticLidarDetection {
     public:
@@ -97,7 +103,8 @@
     }
 
     virtual void ResetMemory(std::vector<uint32_t> points_per_channel) {
-      check(GetChannelCount() > points_per_channel.size());
+
+      //check(GetChannelCount() > points_per_channel.size());
       std::memset(_header.data() + Index::SIZE, 0, sizeof(uint32_t) * GetChannelCount());
 
       uint32_t total_points = static_cast<uint32_t>(
@@ -115,6 +122,34 @@
     virtual void WritePointSync(SemanticLidarDetection &detection) {
       _ser_points.emplace_back(detection);
     }
+
+    //TODO: ByNavid
+    void PrintSemanticLidarDetections()
+    {
+
+        UE_LOG(LogTemp, Warning, TEXT("Number of detections: %d"), _ser_points.size());
+
+
+        FString PlyHeader = FString::Printf(TEXT("ply\nformat ascii 1.0\nelement vertex %d\nproperty float32 x\n"\
+                            "property float32 y\nproperty float32 z\nproperty float32 CosAngle\n" \
+                            "property uint32 ObjIdx\nproperty uint32 ObjTag\nend_header\n"), _ser_points.size());
+
+        FString lines = "";
+
+        for (auto sld : _ser_points)
+        {
+            FString line = FString::Printf(TEXT("%f %f %f %f %d %d\n"), sld.point.X, sld.point.Y, sld.point.Z,
+                sld.cos_inc_angle, sld.object_idx, sld.object_tag);
+            lines += line;
+        }
+
+        PointString = "";
+        PointString += PlyHeader;
+        PointString += lines;
+    }
+
+  public:
+      FString PointString;
 
   protected:
     std::vector<uint32_t> _header;

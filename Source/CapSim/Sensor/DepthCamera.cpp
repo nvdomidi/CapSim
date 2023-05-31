@@ -5,6 +5,7 @@
 #include "CapSim/Sensor/LidarDescription.h"
 #include "CapSim/Sensor/SemanticLidarData.h"
 #include "CapSim/Sensor/RayCastSemanticLidar.h"
+#include "CapSim/Utils/RayCastUtils.h"
 
 
 ADepthCamera::ADepthCamera() : Super()

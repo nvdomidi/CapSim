@@ -23,6 +23,18 @@ public:
 
   ARayCastSemanticLidar();
 
+  UFUNCTION(BlueprintCallable, Category = "CapSim")
+      void StartRecording();
+
+  UFUNCTION(BlueprintCallable, Category = "CapSim")
+      void StopRecording();
+
+  UFUNCTION(BlueprintCallable, Category = "CapSim")
+      void SetCapturePath(const FString path);
+
+  UFUNCTION(BlueprintCallable, Category = "CapSim")
+      void CaptureScene(const FString path);
+
 protected:
 
   virtual void BeginPlay() override;
@@ -69,5 +81,9 @@ protected:
 
 private:
   FSemanticLidarData SemanticLidarData;
+
+  bool bIsRecording = false;
+
+  FString folderPath = "D:/CapSim_Images/SemanticLidar";
 
 };

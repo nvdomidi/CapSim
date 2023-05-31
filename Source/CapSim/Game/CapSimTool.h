@@ -2,6 +2,7 @@
 
 #include "CapSim/Sensor/SensorManager.h"
 #include "CapSim/Sensor/SceneCaptureCamera.h"
+#include "CapSim/Sensor/RayCastSemanticLidar.h"
 #include "CapSim/Game/CapSimEngine.h"
 #include "CapSim/Game/TaggerDelegate.h"
 
@@ -31,6 +32,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "CapSim")
 		ADepthCamera* AddDepthCamera();
+
+	UFUNCTION(BlueprintCallable, Category = "CapSim")
+		ARayCastSemanticLidar* AddSemanticLidar();
 
 
 

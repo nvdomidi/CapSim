@@ -1,7 +1,8 @@
+#include "CapSim/Sensor/RayCastSemanticLidar.h"
+#include "CapSim/Game/CapSimEngine.h"
+
 #include <PxScene.h>
 #include <cmath>
-
-#include "CapSim/Sensor/RayCastSemanticLidar.h"
 
 #include "DrawDebugHelpers.h"
 #include "Engine/CollisionProfile.h"
@@ -16,6 +17,7 @@ ARayCastSemanticLidar::ARayCastSemanticLidar() : Super()
 
 void ARayCastSemanticLidar::BeginPlay()
 {
+    Super::BeginPlay();
   FLidarDescription LidarDescription;
   Description = LidarDescription;
   SemanticLidarData = FSemanticLidarData(Description.Channels);
@@ -42,6 +44,7 @@ void ARayCastSemanticLidar::CreateLasers()
 
 void ARayCastSemanticLidar::PostPhysTick(UWorld *World, ELevelTick TickType, float DeltaTime)
 {
+    UE_LOG(LogTemp, Warning, TEXT("Before SimulateLidar"));
   //TRACE_CPUPROFILER_EVENT_SCOPE(ARayCastSemanticLidar::PostPhysTick);
   SimulateLidar(DeltaTime);
 
@@ -53,6 +56,19 @@ void ARayCastSemanticLidar::PostPhysTick(UWorld *World, ELevelTick TickType, flo
     DataStream.Send(*this, SemanticLidarData, DataStream.PopBufferFromPool());
   }
   */
+
+  //TODO: ByNavid
+
+  UE_LOG(LogTemp, Warning, TEXT("RayCastSemanticLidar PostPhysTick is okkk"));
+  
+  if (bIsRecording) {
+      SemanticLidarData.PrintSemanticLidarDetections();
+
+      FString filePathLabel = FString::Printf(TEXT("%s/%d.txt"), *this->folderPath, FCapSimEngine::GetFrameCounter());
+
+      FFileHelper::SaveStringToFile(SemanticLidarData.PointString, *filePathLabel);
+  }
+  
 }
 
 void ARayCastSemanticLidar::SimulateLidar(const float DeltaTime)
@@ -89,6 +105,7 @@ void ARayCastSemanticLidar::SimulateLidar(const float DeltaTime)
     TRACE_CPUPROFILER_EVENT_SCOPE(ParallelFor);
     ParallelFor(ChannelCount, [&](int32 idxChannel) {
       TRACE_CPUPROFILER_EVENT_SCOPE(ParallelForTask);
+
 
       FCollisionQueryParams TraceParams = FCollisionQueryParams(FName(TEXT("Laser_Trace")), true, this);
       TraceParams.bTraceComplex = true;
@@ -144,8 +161,12 @@ void ARayCastSemanticLidar::WritePointAsync(uint32_t channel, FHitResult &detect
 
 void ARayCastSemanticLidar::ComputeAndSaveDetections(const FTransform& SensorTransform) {
 	TRACE_CPUPROFILER_EVENT_SCOPE_STR(__FUNCTION__);
-  for (auto idxChannel = 0u; idxChannel < Description.Channels; ++idxChannel)
-    PointsPerChannel[idxChannel] = RecordedHits[idxChannel].size();
+
+    for (auto idxChannel = 0u; idxChannel < Description.Channels; ++idxChannel)
+    {
+        PointsPerChannel[idxChannel] = RecordedHits[idxChannel].size();
+    }
+
   SemanticLidarData.ResetMemory(PointsPerChannel);
 
   for (auto idxChannel = 0u; idxChannel < Description.Channels; ++idxChannel) {
@@ -209,7 +230,7 @@ bool ARayCastSemanticLidar::ShootLaser(const float VerticalAngle, const float Ho
   FVector EndTrace = Range * UKismetMathLibrary::GetForwardVector(ResultRot) + LidarBodyLoc;
 
 
-  GetWorld()->ParallelLineTraceSingleByChannel(
+  GetWorld()->LineTraceSingleByChannel(
     HitInfo,
     LidarBodyLoc,
     EndTrace,
@@ -224,4 +245,29 @@ bool ARayCastSemanticLidar::ShootLaser(const float VerticalAngle, const float Ho
   } else {
     return false;
   }
+}
+
+void ARayCastSemanticLidar::StartRecording()
+{
+    bIsRecording = true;
+}
+
+void ARayCastSemanticLidar::StopRecording()
+{
+    bIsRecording = false;
+}
+
+void ARayCastSemanticLidar::SetCapturePath(const FString path)
+{
+    this->folderPath = path;
+}
+
+void ARayCastSemanticLidar::CaptureScene(FString path)
+{
+    if (path.IsEmpty())
+    {
+        path = FString::Printf(TEXT("%s/capture.png"), *this->folderPath);
+    }
+    
+    SemanticLidarData.PrintSemanticLidarDetections();
 }

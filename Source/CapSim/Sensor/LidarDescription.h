@@ -27,7 +27,7 @@ struct CAPSIM_API FLidarDescription
   /// Upper laser angle, counts from horizontal, positive values means above
   /// horizontal line.
   UPROPERTY(EditAnywhere)
-  float UpperFovLimit = 10.0f;
+  float UpperFovLimit = 30.0f;
 
   /// Lower laser angle, counts from horizontal, negative values means under
   /// horizontal line.
