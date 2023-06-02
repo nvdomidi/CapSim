@@ -64,4 +64,41 @@ struct CAPSIM_API FLidarDescription
 
   UPROPERTY(EditAnywhere)
   float NoiseStdDev = 0.0f;
+
+  UPROPERTY(EditAnywhere)
+  uint32 HorizontalPointsPerLaser = 1000;
+
+  FLidarDescription(int Channels,
+      float Range,
+      int PointsPerSecond,
+      float RotationFrequency,
+      float UpperFovLimit,
+      float LowerFovLimit,
+      float HorizontalFov,
+      float AtmospAttenRate,
+      int RandomSeed,
+      float DropOffGenRate,
+      float DropOffIntensityLimit,
+      float DropOffAtZeroIntensity,
+      bool ShowDebugPoints,
+      float NoiseStdDev,
+      int HorizontalPointsPerLaser) : Channels(Channels),
+      Range(Range),
+      PointsPerSecond(PointsPerSecond),
+      RotationFrequency(RotationFrequency),
+      UpperFovLimit(UpperFovLimit),
+      LowerFovLimit(LowerFovLimit),
+      HorizontalFov(HorizontalFov),
+      AtmospAttenRate(AtmospAttenRate),
+      RandomSeed(RandomSeed),
+      DropOffGenRate(DropOffGenRate),
+      DropOffIntensityLimit(DropOffIntensityLimit),
+      DropOffAtZeroIntensity(DropOffAtZeroIntensity),
+      ShowDebugPoints(ShowDebugPoints),
+      NoiseStdDev(NoiseStdDev),
+      HorizontalPointsPerLaser(HorizontalPointsPerLaser){}
+
+   FLidarDescription(){}
+
+
 };

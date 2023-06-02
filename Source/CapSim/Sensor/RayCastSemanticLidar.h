@@ -35,6 +35,27 @@ public:
   UFUNCTION(BlueprintCallable, Category = "CapSim")
       void CaptureScene(const FString path);
 
+  UFUNCTION(BlueprintCallable, Category = "CapSim")
+      void SetSemanticLidarParameters(int Channels = 32,
+          float Range = 1000.0f,
+          int PointsPerSecond = 56000,
+          float RotationFrequency = 10.0f,
+          float UpperFovLimit = 30.0f,
+          float LowerFovLimit = -30.0f,
+          float HorizontalFov = 360.0f,
+          float AtmospAttenRate = 0.004f,
+          int RandomSeed = 0,
+          float DropOffGenRate = 0.45f,
+          float DropOffIntensityLimit = 0.8f,
+          float DropOffAtZeroIntensity = 0.4f,
+          bool ShowDebugPoints = false,
+          float NoiseStdDev = 0.0f,
+          int HorizontalPointsPerLaser = 1000);
+
+  UFUNCTION(BlueprintCallable, Category = "CapSim")
+      void InitializeSemanticLidar();
+
+
 protected:
 
   virtual void BeginPlay() override;
@@ -68,6 +89,8 @@ protected:
   /// This method uses all the saved FHitResults, compute the
   /// RawDetections and then send it to the LidarData structure.
   virtual void ComputeAndSaveDetections(const FTransform &SensorTransform);
+  
+  void ProcessLidar();
   
 
   UPROPERTY(EditAnywhere)

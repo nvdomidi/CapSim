@@ -1,8 +1,10 @@
+# By Navid
+
 import open3d as o3d
 import numpy as np
 
 LABEL_COLORS = np.array([
-    (255, 255, 255), # None
+    (255, 255, 0), # None
     (70, 70, 70),    # Roads
     (100, 40, 40),   # Car
     (55, 90, 80),    # Sky
@@ -57,11 +59,12 @@ def read_ply_file(filename):
     return points, labels, point_number
 
 
-file_path = "23.ply"
+file_path = "capture_lidar.ply"
 
 points, labels, point_number = read_ply_file(file_path)
 
 # get color for each label
+labels = [label if label<len(LABEL_COLORS) else len(LABEL_COLORS)-1 for label in labels]
 int_color = LABEL_COLORS[labels]
 
 point_list = o3d.geometry.PointCloud()

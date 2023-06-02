@@ -17,9 +17,51 @@ ARayCastSemanticLidar::ARayCastSemanticLidar() : Super()
 
 void ARayCastSemanticLidar::BeginPlay()
 {
-    Super::BeginPlay();
-  FLidarDescription LidarDescription;
-  Description = LidarDescription;
+  Super::BeginPlay();
+  //FLidarDescription LidarDescription;
+  //Description = LidarDescription;
+  //SemanticLidarData = FSemanticLidarData(Description.Channels);
+  //CreateLasers();
+  //PointsPerChannel.resize(Description.Channels);
+}
+
+void ARayCastSemanticLidar::SetSemanticLidarParameters(int Channels,
+    float Range,
+    int PointsPerSecond,
+    float RotationFrequency,
+    float UpperFovLimit,
+    float LowerFovLimit,
+    float HorizontalFov,
+    float AtmospAttenRate,
+    int RandomSeed,
+    float DropOffGenRate,
+    float DropOffIntensityLimit,
+    float DropOffAtZeroIntensity,
+    bool ShowDebugPoints,
+    float NoiseStdDev,
+    int HorizontalPointsPerLaser)
+{
+    FLidarDescription LidarDescription(Channels,
+        Range,
+        PointsPerSecond,
+        RotationFrequency,
+        UpperFovLimit,
+        LowerFovLimit,
+        HorizontalFov,
+        AtmospAttenRate,
+        RandomSeed,
+        DropOffGenRate,
+        DropOffIntensityLimit,
+        DropOffAtZeroIntensity,
+        ShowDebugPoints,
+        NoiseStdDev,
+        HorizontalPointsPerLaser);
+
+    Description = LidarDescription;
+}
+
+void ARayCastSemanticLidar::InitializeSemanticLidar()
+{
   SemanticLidarData = FSemanticLidarData(Description.Channels);
   CreateLasers();
   PointsPerChannel.resize(Description.Channels);
@@ -44,33 +86,24 @@ void ARayCastSemanticLidar::CreateLasers()
 
 void ARayCastSemanticLidar::PostPhysTick(UWorld *World, ELevelTick TickType, float DeltaTime)
 {
-    UE_LOG(LogTemp, Warning, TEXT("Before SimulateLidar"));
-  //TRACE_CPUPROFILER_EVENT_SCOPE(ARayCastSemanticLidar::PostPhysTick);
-  SimulateLidar(DeltaTime);
+  // Use this for partial lidar
+  //SimulateLidar(DeltaTime);
 
-  // TODO: SemanticLidarData probably contains the data
-  /* 
-  {
-    TRACE_CPUPROFILER_EVENT_SCOPE_STR("Send Stream");
-    auto DataStream = GetDataStream(*this);
-    DataStream.Send(*this, SemanticLidarData, DataStream.PopBufferFromPool());
-  }
-  */
+  // USE NAVID's CODE FOR FULL 360 DEGREES
+  ProcessLidar();
 
-  //TODO: ByNavid
-
-  UE_LOG(LogTemp, Warning, TEXT("RayCastSemanticLidar PostPhysTick is okkk"));
-  
   if (bIsRecording) {
-      SemanticLidarData.PrintSemanticLidarDetections();
 
-      FString filePathLabel = FString::Printf(TEXT("%s/%d.txt"), *this->folderPath, FCapSimEngine::GetFrameCounter());
+      SemanticLidarData.PrintSemanticLidarDetections();
+      
+      FString filePathLabel = FString::Printf(TEXT("%s/%d.ply"), *this->folderPath, FCapSimEngine::GetFrameCounter());
 
       FFileHelper::SaveStringToFile(SemanticLidarData.PointString, *filePathLabel);
   }
   
 }
 
+// Scan some points in the current frame
 void ARayCastSemanticLidar::SimulateLidar(const float DeltaTime)
 {
   //TRACE_CPUPROFILER_EVENT_SCOPE(ARayCastSemanticLidar::SimulateLidar);
@@ -131,6 +164,10 @@ void ARayCastSemanticLidar::SimulateLidar(const float DeltaTime)
 
   const float HorizontalAngle = FMath::DegreesToRadians(
       std::fmod(CurrentHorizontalAngle + AngleDistanceOfTick, Description.HorizontalFov));
+
+  UE_LOG(LogTemp, Warning, TEXT("CurrentHorizontalAngle: %f, AngleDistanceOfTick: %f, HorizontalAngle: %f, DeltaTime: %f"),
+      CurrentHorizontalAngle, AngleDistanceOfTick, HorizontalAngle, DeltaTime);
+
   SemanticLidarData.SetHorizontalAngle(HorizontalAngle);
 }
 
@@ -262,12 +299,60 @@ void ARayCastSemanticLidar::SetCapturePath(const FString path)
     this->folderPath = path;
 }
 
+
+void ARayCastSemanticLidar::ProcessLidar()
+{
+    const uint32 ChannelCount = Description.Channels;
+    const uint32 PointsToScanWithOneLaser = Description.HorizontalPointsPerLaser;
+    const float CurrentHorizontalAngle = 0;
+    const float AngleDistanceOfTick = Description.HorizontalFov / (static_cast<float>(PointsToScanWithOneLaser - 1));
+    const float AngleDistanceOfLaserMeasure = AngleDistanceOfTick;
+
+    ResetRecordedHits(ChannelCount, PointsToScanWithOneLaser);
+    PreprocessRays(ChannelCount, PointsToScanWithOneLaser);
+
+    GetWorld()->GetPhysicsScene()->GetPxScene()->lockRead();
+    {
+        TRACE_CPUPROFILER_EVENT_SCOPE(ParallelFor);
+        ParallelFor(ChannelCount, [&](int32 idxChannel) {
+            TRACE_CPUPROFILER_EVENT_SCOPE(ParallelForTask);
+
+            FCollisionQueryParams TraceParams = FCollisionQueryParams(FName(TEXT("Laser_Trace")), true, this);
+            TraceParams.bTraceComplex = true;
+            TraceParams.bReturnPhysicalMaterial = false;
+
+            for (auto idxPtsOneLaser = 0u; idxPtsOneLaser < PointsToScanWithOneLaser; idxPtsOneLaser++) {
+                FHitResult HitResult;
+                const float VertAngle = LaserAngles[idxChannel];
+                const float HorizAngle = std::fmod(CurrentHorizontalAngle + AngleDistanceOfLaserMeasure
+                    * idxPtsOneLaser, Description.HorizontalFov) - Description.HorizontalFov / 2;
+                const bool PreprocessResult = RayPreprocessCondition[idxChannel][idxPtsOneLaser];
+
+                if (PreprocessResult && ShootLaser(VertAngle, HorizAngle, HitResult, TraceParams)) {
+                    WritePointAsync(idxChannel, HitResult);
+                }
+            };
+            });
+    }
+    GetWorld()->GetPhysicsScene()->GetPxScene()->unlockRead();
+
+    FTransform ActorTransf = GetTransform();
+    ComputeAndSaveDetections(ActorTransf);
+
+}
+
+
 void ARayCastSemanticLidar::CaptureScene(FString path)
 {
+
     if (path.IsEmpty())
     {
-        path = FString::Printf(TEXT("%s/capture.png"), *this->folderPath);
+        path = FString::Printf(TEXT("%s/capture.ply"), *this->folderPath);
     }
-    
+
+    ProcessLidar();
+
     SemanticLidarData.PrintSemanticLidarDetections();
+
+    FFileHelper::SaveStringToFile(SemanticLidarData.PointString, *path);
 }
