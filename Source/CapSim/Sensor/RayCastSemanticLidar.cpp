@@ -25,7 +25,7 @@ void ARayCastSemanticLidar::BeginPlay()
   //PointsPerChannel.resize(Description.Channels);
 }
 
-void ARayCastSemanticLidar::SetSemanticLidarParameters(int Channels,
+void ARayCastSemanticLidar::SetLidarParameters(int Channels,
     float Range,
     int PointsPerSecond,
     float RotationFrequency,
@@ -60,7 +60,7 @@ void ARayCastSemanticLidar::SetSemanticLidarParameters(int Channels,
     Description = LidarDescription;
 }
 
-void ARayCastSemanticLidar::InitializeSemanticLidar()
+void ARayCastSemanticLidar::InitializeLidar()
 {
   SemanticLidarData = FSemanticLidarData(Description.Channels);
   CreateLasers();
@@ -94,7 +94,7 @@ void ARayCastSemanticLidar::PostPhysTick(UWorld *World, ELevelTick TickType, flo
 
   if (bIsRecording) {
 
-      SemanticLidarData.PrintSemanticLidarDetections();
+      SemanticLidarData.PrintLidarDetections();
       
       FString filePathLabel = FString::Printf(TEXT("%s/%d.ply"), *this->folderPath, FCapSimEngine::GetFrameCounter());
 
@@ -347,12 +347,12 @@ void ARayCastSemanticLidar::CaptureScene(FString path)
 
     if (path.IsEmpty())
     {
-        path = FString::Printf(TEXT("%s/capture.ply"), *this->folderPath);
+        path = FString::Printf(TEXT("%s/capture_semantic.ply"), *this->folderPath);
     }
 
     ProcessLidar();
 
-    SemanticLidarData.PrintSemanticLidarDetections();
+    SemanticLidarData.PrintLidarDetections();
 
     FFileHelper::SaveStringToFile(SemanticLidarData.PointString, *path);
 }

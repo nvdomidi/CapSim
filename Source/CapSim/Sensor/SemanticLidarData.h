@@ -124,7 +124,7 @@
     }
 
     //TODO: ByNavid
-    void PrintSemanticLidarDetections()
+    virtual void PrintLidarDetections()
     {
 
         UE_LOG(LogTemp, Warning, TEXT("Number of detections: %d"), _ser_points.size());

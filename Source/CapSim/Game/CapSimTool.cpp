@@ -74,3 +74,12 @@ ARayCastSemanticLidar* ACapSimTool::AddSemanticLidar()
 
 	return SemanticLidar;
 }
+
+ARayCastLidar* ACapSimTool::AddLidar()
+{
+	auto Lidar = GetWorld()->SpawnActor<ARayCastLidar>(ARayCastLidar::StaticClass());
+
+	CapSimEngine.SensorManager->AddSensor(Lidar);
+
+	return Lidar;
+}

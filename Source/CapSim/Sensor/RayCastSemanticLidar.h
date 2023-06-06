@@ -24,19 +24,19 @@ public:
   ARayCastSemanticLidar();
 
   UFUNCTION(BlueprintCallable, Category = "CapSim")
-      void StartRecording();
+      virtual void StartRecording();
 
   UFUNCTION(BlueprintCallable, Category = "CapSim")
-      void StopRecording();
+      virtual void StopRecording();
 
   UFUNCTION(BlueprintCallable, Category = "CapSim")
-      void SetCapturePath(const FString path);
+      virtual void SetCapturePath(const FString path);
 
   UFUNCTION(BlueprintCallable, Category = "CapSim")
-      void CaptureScene(const FString path);
+      virtual void CaptureScene(FString path);
 
   UFUNCTION(BlueprintCallable, Category = "CapSim")
-      void SetSemanticLidarParameters(int Channels = 32,
+      void SetLidarParameters(int Channels = 32,
           float Range = 1000.0f,
           int PointsPerSecond = 56000,
           float RotationFrequency = 10.0f,
@@ -53,7 +53,7 @@ public:
           int HorizontalPointsPerLaser = 1000);
 
   UFUNCTION(BlueprintCallable, Category = "CapSim")
-      void InitializeSemanticLidar();
+      virtual void InitializeLidar();
 
 
 protected:
@@ -102,10 +102,13 @@ protected:
   std::vector<std::vector<bool>> RayPreprocessCondition;
   std::vector<uint32_t> PointsPerChannel;
 
+  
+
 private:
-  FSemanticLidarData SemanticLidarData;
 
   bool bIsRecording = false;
+
+  FSemanticLidarData SemanticLidarData;
 
   FString folderPath = "D:/CapSim_Images/SemanticLidar";
 

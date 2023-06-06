@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "CapSim/Utils/RandomEngine.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Sensor.generated.h"
@@ -30,6 +32,18 @@ public:
 	
 	// TODO Fix this
 	bool HasActorBegunPlay() { return true; };
+
+	/// Random Engine used to provide noise for sensor output.
+	UPROPERTY()
+	URandomEngine* RandomEngine = nullptr;
+
+	UFUNCTION(BlueprintCallable)
+	void SetSeed(int32 InSeed);
+
+protected:
+	/// Seed of the pseudo-random engine.
+	UPROPERTY(Category = "Random Engine", EditAnywhere)
+	int32 Seed = 123456789;
 
 private:
 	

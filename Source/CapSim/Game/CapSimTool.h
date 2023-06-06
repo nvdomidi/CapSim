@@ -3,11 +3,13 @@
 #include "CapSim/Sensor/SensorManager.h"
 #include "CapSim/Sensor/SceneCaptureCamera.h"
 #include "CapSim/Sensor/RayCastSemanticLidar.h"
+#include "CapSim/Sensor/RayCastLidar.h"
 #include "CapSim/Game/CapSimEngine.h"
 #include "CapSim/Game/TaggerDelegate.h"
 
 #include "CoreMinimal.h"
 #include "CapSimTool.generated.h"
+
 
 UCLASS()
 class CAPSIM_API ACapSimTool : public AActor
@@ -35,6 +37,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "CapSim")
 		ARayCastSemanticLidar* AddSemanticLidar();
+
+	UFUNCTION(BlueprintCallable, Category = "CapSim")
+		ARayCastLidar* AddLidar();
 
 
 

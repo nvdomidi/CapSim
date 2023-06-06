@@ -55,3 +55,9 @@ bool ASensor::AreClientsListening()
 	return true;
 }
 
+void ASensor::SetSeed(const int32 InSeed)
+{
+	check(RandomEngine != nullptr);
+	Seed = InSeed;
+	RandomEngine->Seed(InSeed);
+}

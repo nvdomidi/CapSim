@@ -59,7 +59,7 @@ def read_ply_file(filename):
     return points, labels, point_number
 
 
-file_path = "capture_lidar.ply"
+file_path = "capture_semanticlidar.ply"
 
 points, labels, point_number = read_ply_file(file_path)
 
